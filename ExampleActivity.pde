@@ -21,7 +21,7 @@ class ExampleActivity extends Activity {
 
   // Constructor  
   
-  ExampleActivity( Tester o ) {
+  ExampleActivity( LiveViz o ) {
     super( o, 50, 50, 1150, 650 );
     bgColor = color( 255, 255, 255 );
     eUI = new ExampleUI( this, x1Frame+10, y1Frame+10, x2Frame-170, y2Frame-10 );

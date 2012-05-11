@@ -14,7 +14,7 @@ class MenuActivity extends Activity {
 
   // Constructor
 
-  MenuActivity( Tester o ) {
+  MenuActivity( LiveViz o ) {
     super( o, 250, height/3, width-250, height*2/3 );    
     h = new Header( "http://203.116.116.34:80/getAllActivities" );
     mUI = new MenuUI( this );
