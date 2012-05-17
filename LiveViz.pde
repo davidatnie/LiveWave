@@ -8,8 +8,8 @@ import processing.serial.*;
 PImage bk;
 
 Activity currentActivity;
-ExampleActivity ea;
 SpiralActivity spa;
+WaveActivity wva;
 MenuActivity menu;
 
 // From Spiral v1.6
@@ -84,6 +84,10 @@ void mousePressed() {
     background( 180 );
     if ( currentActivity == menu & spa != null )
       currentActivity = spa;
+    else if( currentActivity == spa ) {
+      initWave( menu.mUI.aDetails );
+      currentActivity = wva;
+    }
     else { 
       menu = new MenuActivity( this );
       currentActivity = menu;
@@ -113,6 +117,13 @@ void initSpiral( String[] aDetails ) {
   currentActivity = spa;
   spa.startSpiral( aDetails );
 } // end initSpiral()
+
+
+
+void initWave( String[] aDetails ) {
+  wva = new WaveActivity( this );
+  wva.startWave( aDetails );
+} // end initWave
 
 
 
@@ -157,7 +168,7 @@ void netEvent( HTMLRequest ml ) {
 
 
 void startSaveToPDF() {
-  beginRecord( PDF, spa.sections[ 0 ].pdfName ); // start saving to PDF file
+  beginRecord( PDF, spa.spiral.pdfName ); // start saving to PDF file
   pdfFont = createFont( "Verdana Bold", 6 );
   textFont( pdfFont );
 } // end startSaveToPDF()

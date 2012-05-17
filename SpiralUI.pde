@@ -51,7 +51,7 @@ class SpiralUI extends AUI {
   
   // First, some temp local variables for helpers
   SpiralActivity downcasted = (SpiralActivity) owner;
-  Spiral currentSpiral = downcasted.sections[ 0 ].spiral;
+  Spiral currentSpiral = downcasted.spiral;
   
   // then, UI routines
   if( mouseButton == LEFT ) {
@@ -87,7 +87,7 @@ class SpiralUI extends AUI {
   void executeMouseDragged() {
     // First, some temp local variables for helpers
     SpiralActivity downcasted = (SpiralActivity) owner;
-    Spiral currentSpiral = downcasted.sections[ 0 ].spiral;
+    Spiral currentSpiral = downcasted.spiral;
 
     // then, UI routines
     if( dist( mouseX, mouseY, currentSpiral.x, currentSpiral.y ) < currentSpiral.rad ) {

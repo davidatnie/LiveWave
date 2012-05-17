@@ -21,9 +21,8 @@ class Function {
 
   
   // Constructor - a Function object is constructed by passing the row number from the dataset file as the argument
-
+  
   Function( Table _artefacts, int row ) {
-    serialNum = row;
     postTime = _artefacts.getInt( row, 0 );
     cPostTime = new Post_Time( postTime, _artefacts.getString( 0, 0 ) );
     studentID = _artefacts.getString( row, 1 );

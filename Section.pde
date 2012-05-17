@@ -4,13 +4,11 @@ class Section {
 
   // Fields
 
-  Spiral spiral;
   Table artefacts;
-  Deployment deployment;
-  Stats stats;
-  Scatter scatter;
+  
   int maxPostTime, minPostTime;
   String exerciseStart, exerciseTitle;
+  Post_Time cExerciseStart, cMaxPostTime, cMinPostTime, cDuration;
   ArrayList funcs; // of type Function
   int lastCountForFuncs;
   String pdfName;
@@ -47,41 +45,14 @@ class Section {
       hasData = false;
       text( "ERROR IN DATASET: DATASET CONTAINS 0 ROWS OF DATA!!!" );
     
-    spiral = new Spiral( funcs, maxPostTime, minPostTime, exerciseStart, exerciseTitle, artefacts, hasData );
+    //spiral = new Spiral( funcs, maxPostTime, minPostTime, exerciseStart, exerciseTitle, artefacts, hasData );
     
-    deployment = new Deployment( funcs, artefacts );
+    //deployment = new Deployment( funcs, artefacts );
     
     // stats will be built after the section's spiral and deployment are built, and after OpUsage has been built
     
   } // end constructor
   
-  
-
-
-  // Overloaded Constructor for Database "Streaming"
-
-  Section( String startTime, String title ) {
-    artefacts = null;         // NOT going to use artefacts in Database "Streaming"
-    funcs = new ArrayList();
-    lastCountForFuncs = 0;
-    pdfName =  title + ".pdf";
-    
-    maxPostTime = 0;
-    minPostTime = 0; // call updateMinMaxPostTime() later to fill these
-    exerciseStart = startTime;
-    exerciseTitle = title;
-    hasData = false;
-    
-    // This version of the constructor only creates a new instance, but will NOT populate it with data.
-    // Population of data will come in via another method populateWStream()
-    // just build a blank spiral and deployment, to be populated later
-    
-    spiral = new Spiral( exerciseStart, exerciseTitle, hasData );
-    deployment = new Deployment(); // this may not exist in live mode
-    
-    // stats will be built after the section's spiral and deployment are built, and after OpUsage has been built
-  } // end Overloaded constructor for Database "Streaming"
-
 
 
 
@@ -101,28 +72,14 @@ class Section {
     
     // This version of the constructor only creates a new instance, but will NOT populate it with data.
     // Population of data will come in via another method populateWStream()
-    // just build a blank spiral and deployment, to be populated later
     
-    spiral = new Spiral();
-    deployment = new Deployment(); // this may not exist in live mode
-    
-    // stats will be built after the section's spiral and deployment are built, and after OpUsage has been built
+    // stats will be built after the section's spiral is built, and after OpUsage has been built
   } // end Overloaded constructor for Database "Streaming"
   
 
 
 
   // Methods 
-
-  void sproutSection( String tempStartTime, String tempTitle ) {
-    setStartTime( tempStartTime );
-    setTitle( tempTitle );  
-    pdfName = tempTitle + ".pdf";
-    spiral.sproutSpiral( tempStartTime, tempTitle, hasData );
-  } // end sproutSection()
-
-
-
 
   void setStartTime( String st ) {
     exerciseStart = st;
@@ -195,29 +152,6 @@ class Section {
   } // end getFuncsCount()
 
 
-  
-
-  void updateWNewDatastream() {  // consider removing - not called by anyone
-  // fetches new datastream and apply it to section and spiral
-    String theUrl = "http://203.116.116.34:80/";
-    Table tStream = fetchDatastream( theUrl );
-    populateFuncs( tStream );
-    applyToSpiral( tStream );
-  } // end updateNewDatastream()
-
-
-
-
-  void applyToSpiral( Table t ) {
-    print( "Applying Datastream To Spiral ... " );
-    spiral.addSpokes( funcs, lastCountForFuncs, minPostTime, maxPostTime, t );
-    spiral.updateHasData();
-    String tempExerciseStart = t.getString( 0, 0 );
-    spiral.updateTimings( tempExerciseStart, minPostTime, maxPostTime );
-    println( "Spiral spoke count is now " + spiral.spokes.size() + " [ DONE ]" );
-  }  // end applyToSpiral()
-
-
 
 
   Table fetchDatastream( String urlAddress ) {  // consider removing, not called by any one
@@ -261,26 +195,9 @@ class Section {
       ret += ( f + "\n" );
     }
     ret += ( "-------------------------------------------" + "\n" );
-    ret += ( "spiral is: " );
-    if( spiral == null )
-      ret += ( "still NULL" + "\n" );
-    else
-      ret += ( "NOT null" + "\n" );
-
+    
     ret += ( "artefacts is: " );
     if( artefacts == null )
-      ret += ( "still NULL" + "\n" );
-    else
-      ret += ( "NOT null" + "\n" );
-
-    ret += ( "deployment is: " );
-    if( deployment == null )
-      ret += ( "still NULL" + "\n" );
-    else
-      ret += ( "NOT null" + "\n" );
-
-    ret += ( "scatter is: " );
-    if( scatter == null )
       ret += ( "still NULL" + "\n" );
     else
       ret += ( "NOT null" + "\n" );

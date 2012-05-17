@@ -3,43 +3,39 @@
 class OpsStats {
   // Fields
   OpsUsage schOpsUsage;
-  ArrayList clsOpsUsage = new ArrayList();
+  ArrayList < OpsUsage > clsOpsUsage = new ArrayList();
   
 
   // Constructor
-  OpsStats( Section[] _sections ) {
-    Section[] tempSections = _sections;
-    for( int i = 0; i < tempSections.length; i++ ) {// go through each cls and create its OpDistrib instances for all the different operator types
-      clsOpsUsage.add( new OpsUsage() );
-      OpsUsage co = ( OpsUsage ) clsOpsUsage.get( i );
-      // check to see if tempSections has data
-      if( tempSections[ i ].hasData ) {
-        co.plusOp = new OpDistrib( 'P', tempSections[ i ].spiral );
-        co.minusOp = new OpDistrib( 'M', tempSections[ i ].spiral );
-        co.timesOp = new OpDistrib( 'T', tempSections[ i ].spiral );
-        co.dividesOp = new OpDistrib( 'D', tempSections[ i ].spiral );
-        co.squareOp = new OpDistrib( 'S', tempSections[ i ].spiral );
-        co.negativeOp = new OpDistrib( 'N', tempSections[ i ].spiral );
-      } else {    // tempSections has no data
-        co.plusOp = new OpDistrib( 'P' );
-        co.minusOp = new OpDistrib( 'M' );
-        co.timesOp = new OpDistrib( 'T' );
-        co.dividesOp = new OpDistrib( 'D' );
-        co.squareOp = new OpDistrib( 'S' );
-        co.negativeOp = new OpDistrib( 'N' );
-      } // end if tempSections has no data
-            
-    } // end for i
+  OpsStats( Spiral spir ) {
+    clsOpsUsage.add( new OpsUsage() );
+    OpsUsage co = ( OpsUsage ) clsOpsUsage.get( 0 );
+    // check to see if spir has data
+    if( spir.hasData ) {
+      co.plusOp     = new OpDistrib( 'P', spir );
+      co.minusOp    = new OpDistrib( 'M', spir );
+      co.timesOp    = new OpDistrib( 'T', spir );
+      co.dividesOp  = new OpDistrib( 'D', spir );
+      co.squareOp   = new OpDistrib( 'S', spir );
+      co.negativeOp = new OpDistrib( 'N', spir );
+    } else {    // tempSections has no data
+      co.plusOp     = new OpDistrib( 'P' );
+      co.minusOp    = new OpDistrib( 'M' );
+      co.timesOp    = new OpDistrib( 'T' );
+      co.dividesOp  = new OpDistrib( 'D' );
+      co.squareOp   = new OpDistrib( 'S' );
+      co.negativeOp = new OpDistrib( 'N' );
+    } // end if tempSections has no data
     
     // building the schOpsUsage instance object
     schOpsUsage = new OpsUsage();
     // building instances of OpDistrib objects at the School-level should only be done after building for the Class-level
-    schOpsUsage.plusOp = buildOpDistribSch( 'P', tempSections );
-    schOpsUsage.minusOp = buildOpDistribSch( 'M', tempSections );
-    schOpsUsage.timesOp = buildOpDistribSch( 'T', tempSections );
-    schOpsUsage.dividesOp = buildOpDistribSch( 'D', tempSections );
-    schOpsUsage.squareOp = buildOpDistribSch( 'S', tempSections );
-    schOpsUsage.negativeOp = buildOpDistribSch( 'N', tempSections );
+    schOpsUsage.plusOp     = buildOpDistribSch( 'P', spir );
+    schOpsUsage.minusOp    = buildOpDistribSch( 'M', spir );
+    schOpsUsage.timesOp    = buildOpDistribSch( 'T', spir );
+    schOpsUsage.dividesOp  = buildOpDistribSch( 'D', spir );
+    schOpsUsage.squareOp   = buildOpDistribSch( 'S', spir );
+    schOpsUsage.negativeOp = buildOpDistribSch( 'N', spir );
    
     //showOpDistribSch( schOpsUsage.negativeOp );
     
@@ -111,6 +107,64 @@ class OpsStats {
     */
     return tempOpSch;
   } // end buildOpDistribSch
+  
+  
+  
+  
+  OpDistrib buildOpDistribSch( char opType, Spiral spir ) {
+  // Overloaded version for use with Live Spiral, takes Spiral as argument instead of Section[]
+  //
+    ArrayList tempPointsHit = new ArrayList();
+    ArrayList tempPointsNoHit = new ArrayList();
+    ArrayList tempPointsAll = new ArrayList();
+    String tempLabel = " ";
+    
+    // Live Spiral will ignore HIT and NO-HIT routines
+    // get the appropriate OpDistrib object's pointsHit, pointsNoHit and pointsAll
+    OpsUsage co = ( OpsUsage ) clsOpsUsage.get( 0 );
+    switch ( opType ) {
+        case 'P' :
+          tempPointsAll = buildSchDistribPt( co.plusOp.pointsAll, tempPointsAll );
+          tempLabel = "[ + ]";  
+        break;   
+        case 'M' :
+          tempPointsAll = buildSchDistribPt( co.minusOp.pointsAll, tempPointsAll );
+          tempLabel = "[ - ]";  
+        break;
+        case 'T' :      
+          tempPointsAll = buildSchDistribPt( co.timesOp.pointsAll, tempPointsAll );
+          tempLabel = "[ * ]";  
+        break;
+        case 'D' :
+          tempPointsAll = buildSchDistribPt( co.dividesOp.pointsAll, tempPointsAll );
+          tempLabel = "[ / ]";  
+        break;
+        case 'S' :    
+          tempPointsAll = buildSchDistribPt( co.squareOp.pointsAll, tempPointsAll );
+          tempLabel = "[ ^ ]";  
+        break;
+        case 'N' :
+          tempPointsAll = buildSchDistribPt( co.negativeOp.pointsAll, tempPointsAll );
+          tempLabel = "[ -() ]";  
+        break;
+        default :
+          tempLabel = " ";
+        break;
+    } // end switch
+
+    OpDistrib tempOpSch = new OpDistrib( tempPointsHit, tempPointsNoHit, tempPointsAll, tempLabel );
+    /*
+    println( "From tempOpSch - Label: " + tempOpSch.label );  
+    for( int i = 0; i < tempOpSch.pointsHit.size(); i++ ) {
+     DistribPt pt = ( DistribPt ) tempOpSch.pointsHit.get( i );
+      println( pt.value +"---"+pt.count ); 
+    }
+    println(" +++++++++++++ " );
+    */
+    return tempOpSch;
+  } // end buildOpDistribSch
+  
+  
 
   
   ArrayList buildSchDistribPt( ArrayList _points, ArrayList _pointsSch ) {

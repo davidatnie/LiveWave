@@ -1,0 +1,52 @@
+class WaveUI extends AUI {
+
+  // Fields
+
+
+
+
+  // Constructor
+
+  WaveUI( WaveActivity o ) {
+    super( 30, 400, 200, 400 + 200 );
+    owner = o;
+  } // end constructor
+
+
+
+
+  // Methods
+
+  @Override
+  void executeMousePressed() {
+
+  } // end executeMousePressed()
+
+
+
+
+  @Override
+  void executeMouseDragged() {
+
+   } // end executeMouseDragged()
+
+
+
+
+  @Override
+  void update() {
+    super.update();
+  } // end update()
+
+
+
+
+  @Override
+  void display() {
+    super.display();
+  } // end display()
+
+
+
+
+} // end class WaveUI

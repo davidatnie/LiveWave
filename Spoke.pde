@@ -50,7 +50,7 @@ class Spoke extends Function {
 
   // Overloaded constructor for live database streaming
   Spoke( Table _artefacts, int row, int tempSN ) {
-    super( _artefacts, row );  
+    super( _artefacts, row, tempSN );  
     c = setColor( hitTxt );
     freq = 1;
     isMouseOverFunc = false;
@@ -61,7 +61,6 @@ class Spoke extends Function {
     yMOFunc = int( outerY );
     xMOFreq = int( innerX );
     yMOFreq = int( innerY );
-    serialNum = tempSN;
   } // end overloaded constructor
 
 

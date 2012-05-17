@@ -61,8 +61,8 @@ class MPanel {
 
   void recall( int index ) {
     activeDataset = mButtons[ index ].getSectionIndex();
-    sections[ activeDataset ].spiral.userRotate = mButtons[ index ].getUserRotateDegree();  
-    sections[ activeDataset ].spiral.deltaRotate = mButtons[ index ].getUserRotateDegree(); // to disable "turning effect"
+    spa.spiral.userRotate = mButtons[ index ].getUserRotateDegree();  
+    spa.spiral.deltaRotate = mButtons[ index ].getUserRotateDegree(); // to disable "turning effect"
    
   } // end recall()
   
@@ -71,7 +71,7 @@ class MPanel {
 
   void store( int index ) {
     mButtons[ index ].setSectionIndex( activeDataset );
-    mButtons[ index ].setUserRotateDegree( sections[ activeDataset ].spiral.userRotate );
+    mButtons[ index ].setUserRotateDegree( spa.spiral.userRotate );
   } // end store()
 
 

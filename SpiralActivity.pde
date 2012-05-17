@@ -6,7 +6,7 @@ class SpiralActivity extends LVActivity {
   // Fields
   
   SpiralUI spaUI;
-  Section[] sections;
+  Spiral spiral;
   OpsStats opsStats;
 
 
@@ -20,9 +20,8 @@ class SpiralActivity extends LVActivity {
     spaUI = new SpiralUI( this );
     aUI = spaUI;
        
-    // only create a "blank shell" for the section object instance
-    sections = new Section[ 1 ];    
-    sections[ 0 ] = new Section(); 
+    // only create a "blank shell" for the spiral object instance
+    spiral = new Spiral(); 
     
   } // end constructor
   
@@ -46,7 +45,7 @@ class SpiralActivity extends LVActivity {
     prepForNextDatastream();
     View renderer = aUI.view;
     // Drawing routines
-    sections[ 0 ].spiral.display();
+    spiral.display();
     // CRV score metric needs to be tweaked, Dont show them yet
     /*
     fill( popUpBkgrd );
@@ -57,7 +56,7 @@ class SpiralActivity extends LVActivity {
     textSize( 15 );
     text( "Total Creativity Score:", 50, 55 );
     textSize( 40 );
-    text( sections[ 0 ].spiral.crvTotal, 40, 100 );
+    spiral.crvTotal, 40, 100 );
     */
   } // end render()
 
@@ -68,9 +67,9 @@ class SpiralActivity extends LVActivity {
     // aDetails [0] [1] [2] is url, startTime and title
     super.startLV( aDetails );
     
-    // create a new section and populate it
-    print( "Creating new Section using provided details: " + aDetails[ 1 ] + " " + aDetails[ 2 ] + " ... " );
-    sections[ 0 ].sproutSection( aDetails[ 1 ], aDetails[ 2 ] );
+    // create a new spiral and put in activity details into it
+    print( "Creating new Spiral using provided details: " + aDetails[ 1 ] + " " + aDetails[ 2 ] + " ... " );
+    spiral.sproutSpiral( aDetails[ 1 ], aDetails[ 2 ] );
     println( "[DONE]" );
 
   } // end startSpiral()
@@ -79,36 +78,35 @@ class SpiralActivity extends LVActivity {
 
   
   void processDatastream( Table databaseStream ){
-    // this method processes the datastream received from the database. It's unique for Spiral and Wave
-    //
-    sections[ 0 ].populateFuncs( databaseStream );
-    sections[ 0 ].applyToSpiral( databaseStream );
-    sections[ 0 ].lastCountForFuncs = sections[ 0 ].funcs.size();
+  // this method processes the datastream received from the database. It's unique for Spiral and Wave
+  //
+    spiral.growSpokes( databaseStream );
+    spiral.lastCountForFuncs = spiral.funcs.size();
 
 	        
     // rebuild opsStats after each wave of new datastream
     // NOTE: may need a persistent cumulative Table of Data
-    opsStats = new OpsStats( sections );
+    opsStats = new OpsStats( spiral );
     //println( opsStats.schOpsUsage + "SCHOOL" );
-    //println( opsStats.clsOpsUsage.get( 0 ) + sections[ 0 ].pdfName );
+    //println( opsStats.clsOpsUsage.get( 0 ) + spiral.pdfName );
 
-    // build stats for the sections
-    sections[ 0 ].stats = new Stats( sections[ 0 ].spiral, ( OpsUsage )  opsStats.clsOpsUsage.get( 0 ), opsStats.schOpsUsage );
-    //println( sections[ 0 ].stats.plusWt );
-    //println( sections[ 0 ].stats.minusWt );
-    //println( sections[ 0 ].stats.timesWt );
-    //println( sections[ 0 ].stats.dividesWt );
-    //println( sections[ 0 ].stats.squareWt );
-    //println( sections[ 0 ].stats.negativeWt );
+    // build stats for the spiral
+    spiral.stats = new Stats( spiral, ( OpsUsage )  opsStats.clsOpsUsage.get( 0 ), opsStats.schOpsUsage );
+    //println( spiral.stats.plusWt );
+    //println( spiral.stats.minusWt );
+    //println( spiral.stats.timesWt );
+    //println( spiral.stats.dividesWt );
+    //println( spiral.stats.squareWt );
+    //println( spiral.stats.negativeWt );
         
     // recalculate CRV scores
-    for( int i = 0; i < sections[ 0 ].spiral.spokes.size(); i++ ) {
-      Spoke s = ( Spoke ) sections[ 0 ].spiral.spokes.get( i );
-      s.computeCRVScore( sections[ 0 ].stats.plusWt, sections[ 0 ].stats.minusWt, sections[ 0 ].stats.timesWt, sections[ 0 ].stats.dividesWt, sections[ 0 ].stats.squareWt, sections[ 0 ].stats.negativeWt );
+    for( int i = 0; i < spiral.spokes.size(); i++ ) {
+      Spoke s = ( Spoke ) spiral.spokes.get( i );
+      s.computeCRVScore( spiral.stats.plusWt, spiral.stats.minusWt, spiral.stats.timesWt, spiral.stats.dividesWt, spiral.stats.squareWt, spiral.stats.negativeWt );
     }
-    sections[ 0 ].spiral.computeCRVTotal();
+    spiral.computeCRVTotal();
     println( "Showing contents of spiral: " );
-    println( sections[ 0 ].spiral );
+    println( spiral );
   } // end processDatastream()
 
 

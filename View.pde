@@ -8,10 +8,13 @@ class View {
   float x1a, y1a, x2a, y2a;          // viewing area edge coordinates ( excluding scroll bars )
   float x1sbv, y1sbv, x2sbv, y2sbv;  // scroll bar Vertical - coordinates
   float x1sbh, y1sbh, x2sbh, y2sbh;  // scroll bar Horizontal - coordinates
-  float viewWidth, viewHeight;
+  float viewWidth, viewHeight;       
   float xScrollPos1, yScrollPos1, xScrollPos2, yScrollPos2;      // scroller position for determining rendering offsets
+  int viewTextSize;
+  PFont viewFont;
   PImage img;
   float contentHeight, contentWidth;
+  color bgColor;
   Button sbUp, sbDown, sbLeft, sbRight; // the four scrollbar buttons
   ScrollPosButton sbVer, sbHor;         // the two draggable scrollbars
   float step;  
@@ -80,6 +83,8 @@ class View {
     
     contentHeight = 0;
     contentWidth = 0;
+
+    bgColor = color( 255, 255, 255 ); // setting white as the default color
 
     updateOffsetRenders();
     
@@ -235,13 +240,13 @@ class View {
   } // end putImage()
   
   
+
+
   void putLine( float tx1, float ty1, float tx2, float ty2 ) {
     updateContentDimension( tx1, ty1 );
-    updateContentDimension( tx2, ty2 );
-    
+    updateContentDimension( tx2, ty2 );    
     line( calcX( tx1 ), calcY( ty1 ), calcX( tx2 ), calcY( ty2 ) );
   } // end putLine()
-
 
 
 
@@ -255,30 +260,44 @@ class View {
 
 
 
+  void putText( String s, float tx, float ty ) {
+    textFont( viewFont, viewTextSize );
+    updateContentDimension( tx, ty - viewTextSize );
+    updateContentDimension( tx + textWidth( s ), ty + ( viewTextSize / 2 ) );
+    text( s, calcX( tx ), calcY( ty ) );
+  } // end putText()
+
+
+
+
   void setImage( PImage pimg ) {
     img = pimg;
     setContentHeight( pimg.height );
     setContentWidth( pimg.width );
   } // end setImage()
   
+
   
   
   void setContentHeight( int h ) {
     contentHeight = float( h );
   } // end setContentHeight()
   
+
   
   
   void setContentHeight( float h ) {
     contentHeight = h;
   } // end setContentHeight()
   
+
   
   
   void setContentWidth( int w ) {
     contentWidth = float( w );
   } // end setContentWidth()
   
+
   
   
   void setContentWidth( float w ) {
@@ -287,9 +306,43 @@ class View {
 
 
 
+  
+  void putTextFont( PFont f ) {
+    viewFont = f;
+    textFont( f );
+  } // end putTextfont()
+
+
+
+
+  void putTextFont( PFont f, int size ) {
+    viewFont = f;
+    viewTextSize = size;
+    textFont( f, size );
+  } // end putTextFont()
+
+
+
+
+  void putTextSize( int size ) {
+    viewTextSize = size;
+    textSize( size );
+  } // end putTextSize()
+
+
+
+
+  void putBgColor( color c ) {
+    bgColor = c;
+  } // end putBgColor()
+
+
+
+
   float calculateXOffsetRender() {
     return ( x1a - xScrollPos1 );
   }
+
 
 
 

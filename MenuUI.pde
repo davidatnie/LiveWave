@@ -6,6 +6,8 @@ class MenuUI extends AUI {
 
   // Fields
   
+  String[] aDetails = new String[ 3 ];
+  
 
 
 
@@ -65,7 +67,7 @@ class MenuUI extends AUI {
           String addr = buildQueryAddress();
 	  String startTime = acquireActivityStartTime();
           String title = buildActivityTitle();
-	  String[] aDetails = new String[ 3 ];
+	  //String[] aDetails = new String[ 3 ];
 	  aDetails[ 0 ] = addr;
 	  aDetails[ 1 ] = startTime;
 	  aDetails[ 2 ] = title;

@@ -3,14 +3,13 @@
 // The following classes are required:
                     // - Spoke 
                     
-class Spiral {
+class Spiral extends Section {
 
   // Fields
 
   ArrayList spokes;
-  Post_Time cExerciseStart, cMaxPostTime, cMinPostTime, cDuration;
-  int maxPostTime;
   float crvTotal;
+  Stats stats;
   float x, y, diam, rad;
   PFont f;
   String title;
@@ -53,35 +52,10 @@ class Spiral {
 
 
 
-
-  // Overloaded constructor for use with live database "streaming"
-  Spiral( String tempExerciseStart, String tempExerciseTitle, boolean tempHasData ) { // Spiral object is constructed by passing an ArrayList of Function objects and a Table object
-    x = 350 + ( ( width - 350 ) / 2 );   // hard-coded to width of the left panel (350)
-    y= height / 2;
-    diam = 200;
-    rad = diam / 2;
-    spokes = new ArrayList();  // just creates an empty spokes ArrayList, to be populated later
-    maxPostTime = 0;
-    cExerciseStart = new Post_Time( 0, tempExerciseStart );  // the timings should be updated upon addSpokes()
-    cMaxPostTime = new Post_Time( 0, tempExerciseStart );
-    cMinPostTime = new Post_Time( 0, tempExerciseStart );
-    cDuration = new Post_Time( maxPostTime, "00:00:00" );
-    
-    title = tempExerciseTitle; 
-    userRotate = 0;
-    deltaRotate = userRotate;
-    //f = createFont("SansSerif.plain-12.vlw", 12 );                       // spiralFont is a global variable for easy modification
-    titleSize = 20;
-    spokeFontSize = 11;
-    spokeFreqBar = color( 40, 40, 40 );
-    
-    hasData = tempHasData; 
-  } // end overloaded constructor
-  
-  
   
   // Overloaded constructor for use with live database "streaming"
-  Spiral() { // Spiral object is constructed by passing an ArrayList of Function objects and a Table object
+  Spiral() {
+    super();
     x = 350 + ( ( width - 350 ) / 2 );   // hard-coded to width of the left panel (350)
     y= height / 2;
     diam = 200;
@@ -106,17 +80,29 @@ class Spiral {
   
   
   
-  void sproutSpiral( String tempExerciseStart, String tempExerciseTitle, boolean tempHasData ) {
+  void sproutSpiral( String tempExerciseStart, String tempExerciseTitle ) {
+    setStartTime( tempExerciseStart );
+    setTitle( tempExerciseTitle );  
+    pdfName = tempExerciseTitle + ".pdf";
     cExerciseStart = new Post_Time( 0, tempExerciseStart );  // the timings should be updated upon addSpokes()
     cMaxPostTime = new Post_Time( 0, tempExerciseStart );
     cMinPostTime = new Post_Time( 0, tempExerciseStart );
     title = tempExerciseTitle; 
-    hasData = tempHasData;
   } // end sproutSpiral()
 
 
 
   // Methods
+
+  void growSpokes( Table t ) {
+    super.populateFuncs( t );
+    print( "Applying Datastream To Spiral ... " );
+    addSpokes( funcs, lastCountForFuncs, minPostTime, maxPostTime, t );
+    updateHasData();
+    String tempExerciseStart = t.getString( 0, 0 );
+    updateTimings( tempExerciseStart, minPostTime, maxPostTime );
+    println( "Spiral spoke count is now " + spokes.size() + " [ DONE ]" );
+  }  // end applyToSpiral()
 
   void updateTimings( String tempExerciseStart, int tempMinPostTime, int tempMaxPostTime ) {
     maxPostTime = tempMaxPostTime;
@@ -364,7 +350,8 @@ class Spiral {
         if( s.funcString.equals("#NAME?") ) {                 // markings for "#Name?" function strings
           fill( 200, 0, 0, 127 );
           rect( 0, 0, textWidth( s.funcString ), -15 );
-        } */
+        } 
+	*/
         fill( 0, 0, 0, 255 );
         text( s.funcString, 0, 0 );
         popMatrix();
