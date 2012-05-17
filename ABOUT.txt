@@ -1,0 +1,22 @@
+Files belonging to Live Spiral:
+SpiralActivity.pde
+SpiralUI.pde
+Spiral.pde
+Spoke.pde
+Stats.pde
+OpStats.pde
+OpDistrib.pde
+OpsUsage.pde
+Scatter.pde
+DistribPt.pde
+
+
+Files belonging to Live Wave:
+WaveActivity.pde
+WaveUI.pde
+Wave.pde
+WavePt.pde
+Student.pde
+Tab.pde
+Deployment.pde
+Strat.pde

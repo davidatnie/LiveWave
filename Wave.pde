@@ -18,6 +18,8 @@ class Wave extends Section {
 
   Wave() {
     super();
+    students = new ArrayList();
+    wavePoints = new ArrayList();
   } // end constructor
 
 
@@ -66,7 +68,7 @@ class Wave extends Section {
       Function tf = tempFuncs.get( i );
       int dup = 0;
       int sumDup = 0;
-
+      println( students.size() );
       if( students.size() == 0 ) { // first entry of the students list
         students.add( new Student( tempTable, i + 1, students.size() ) );
       } else {
@@ -88,6 +90,7 @@ class Wave extends Section {
 
 
   void updateHasData() {
+    println( "calling updateHasData()" );
     if( wavePoints.size() > 0 )
       hasData = true;
     else
@@ -98,10 +101,14 @@ class Wave extends Section {
 
 
   void display( View r ) {
+    r.clearBackground();
     r.putTextFont( spiralFont, 12 );
-    for( WavePt wp : wavePoints ) {
-      r.putText( wp.funcString, 200, ( wp.serialNum + 1 ) * 12 );
-    } // end for wavePoints
+    stroke( 0 );
+    fill( 0 );
+    if( hasData ) 
+      for( WavePt wp : wavePoints ) {
+        r.putText( wp.funcString, 200, ( wp.serialNum + 1 ) * 12 );
+      } // end for wavePoints
   } // end display()
 
 

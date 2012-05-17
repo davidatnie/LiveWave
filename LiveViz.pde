@@ -84,8 +84,7 @@ void mousePressed() {
     background( 180 );
     if ( currentActivity == menu & spa != null )
       currentActivity = spa;
-    else if( currentActivity == spa ) {
-      initWave( menu.mUI.aDetails );
+    else if( currentActivity == spa & wva != null) {
       currentActivity = wva;
     }
     else { 
@@ -120,8 +119,10 @@ void initSpiral( String[] aDetails ) {
 
 
 
+
 void initWave( String[] aDetails ) {
   wva = new WaveActivity( this );
+  //currentActivity = wva;
   wva.startWave( aDetails );
 } // end initWave
 
@@ -160,8 +161,11 @@ void netEvent( HTMLRequest ml ) {
   if( currentActivity == spa )
   {
     spa.dataWholeChunk = ml.readRawSource();
-    println( "done passing html input to dataWholeChunk" ); 
   }
+  else if( currentActivity == wva ) {
+    wva.dataWholeChunk = ml.readRawSource();
+  }
+  println( "done passing html input to dataWholeChunk" ); 
 }
 
 

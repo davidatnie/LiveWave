@@ -45,6 +45,9 @@ class LVActivity extends Activity {
 
   } // end startLV() 
 
+
+
+
   void display() {
     super.display();
     // Put details of drawing stuff inside render() below
@@ -56,7 +59,9 @@ class LVActivity extends Activity {
   void render() {
     // there's no drawing routines here, only updating datastream
     // from the database
+    println( "now running LVActivity.updateDatastream()" );
     updateDatastream();
+    println( "value of hasNewDatastream is: " + hasNewDatastream );
   } // end render()
 
 
@@ -65,7 +70,9 @@ class LVActivity extends Activity {
   void updateDatastream() {
     // poll database every five seconds
     int now = millis();
+    println( "elapsed: " + ( now - lastRequestTime ) );
     if( now - lastRequestTime > 5000 ) {
+      println( htmlRequest );
       if( htmlRequest == null ) {
         println( "[ MAKING NEXT URL ADDRESS ]");
 	println( "     base URL is " + baseURLAddress );
@@ -124,10 +131,12 @@ class LVActivity extends Activity {
     
     
   void connectDB( String s ) {
+    println( "in connectDB(), setting htmlRequest to this address: " + s );
     htmlRequest = new HTMLRequest( owner, s );
     lastRequestTime = millis();
     htmlRequest.makeRequest();
     println( "connecting to DB with the following address: " + s );
+    println( lastRequestTime );
   } // end connectDB
 
 

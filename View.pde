@@ -203,6 +203,15 @@ class View {
   float calcY( float val ) {
     return yOffsetRender + val;
   } // end calcY()
+  
+  
+  
+  void clearBackground() {
+    fill( bgColor );
+    rectMode( CORNERS );
+    rect( x1, y1, x2, y2 );
+    noFill();
+  } // end clearBackground()
 
 
 

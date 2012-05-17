@@ -35,6 +35,7 @@ class MenuActivity extends Activity {
   
   void passActivityDetails( String[] aDetails ) {
     owner.initSpiral( aDetails );
+    owner.initWave( aDetails );
   } // end passActivityDetails()
 
 

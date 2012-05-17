@@ -33,6 +33,12 @@ class WaveActivity extends LVActivity {
 
 
   void render() {
+    println( "in WaveActivity.render()" );
+    super.render();
+    println( "just called super.render(), value of hasNewDatastream is: " + hasNewDatastream );
+    if( hasNewDatastream )
+      processDatastream( databaseStream );
+    prepForNextDatastream();
     View renderer = aUI.view;
     renderer.updateOffsetRenders();
     fill( 250, 0 , 250 );
@@ -50,7 +56,9 @@ class WaveActivity extends LVActivity {
 
 
   void startWave( String[] aDetails ) {
-    // aDetails [0] [1] [2] is url, startTime and title
+  // aDetails [0] [1] [2] is url, startTime and title
+  //
+    println( "in WaveActivity.startWave(), now calling super.startLV()" );
     super.startLV( aDetails );
 
     // create a new wave and put in activity details into it
@@ -63,6 +71,7 @@ class WaveActivity extends LVActivity {
 
 
   void processDatastream( Table databaseStream ) {
+    println( "processing Databasestream for Wave ... " );
     wave.growWave( databaseStream );
     wave.lastCountForFuncs = wave.funcs.size();
   } // end processDatastream()
