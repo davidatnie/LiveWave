@@ -119,6 +119,7 @@ class Table {
 
 
   String getString(int rowIndex, int column) {
+    println( ">>> returning data for r,c " + rowIndex + " " + column );
     return data[rowIndex][column].trim();
   }
 

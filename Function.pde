@@ -51,7 +51,7 @@ class Function {
   Function( Table t, int row, int lastSerNum ) {
     serialNum = lastSerNum + 1;
     postTime = t.getInt( row, 0 );
-    cPostTime = new Post_Time( postTime, t.getString( 0, 0 ) );
+    cPostTime = new Post_Time( postTime, t.getString( row, 0 ) );
     studentID = t.getString( row, 1 );
     yOrder = t.getString( row, 2 );
     funcString = t.getString( row, 3 );

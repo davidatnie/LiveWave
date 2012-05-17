@@ -46,15 +46,19 @@ class Wave extends Section {
     addStudents( funcs, lastCountForFuncs, minPostTime, maxPostTime, t );
     addWavePoints( funcs, lastCountForFuncs, t ); 
     updateHasData();
+    println( "finished going trhough growWave()" );
   } // end growWave()
 
 
 
 
   void addWavePoints( ArrayList <Function> tempFuncs, int tempLastCountForFuncs, Table tempTable ) {
+    println( "tempLastCountForFuncs, tempFuncs.size() - tempTable.size() " + tempLastCountForFuncs + " " + tempFuncs.size() + "-" + tempTable.getRowCount() );
     for( int i = tempLastCountForFuncs; i < tempFuncs.size(); i++ ) {
       Function tf = tempFuncs.get( i );
-      wavePoints.add( new WavePt( this, tempTable, i + 1, tf.serialNum ) );
+      println( "adding wavePoint.. " );
+      println( tf );
+      wavePoints.add( new WavePt( this, tempTable, i - tempLastCountForFuncs + 1, tf.serialNum ) );
     } // end for i
   } // end addWavePoints()
 
@@ -70,6 +74,7 @@ class Wave extends Section {
       int sumDup = 0;
       println( students.size() );
       if( students.size() == 0 ) { // first entry of the students list
+        println( "tempTable's size is: " + tempTable.getRowCount() );
         students.add( new Student( tempTable, i + 1, students.size() ) );
       } else {
         for( int j = 0; j < students.size(); j++ ) { // subsequent entry to the spokes list, need to check fo duplication
