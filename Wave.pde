@@ -109,19 +109,34 @@ class Wave extends Section {
     r.clearBackground();
     r.putTextFont( spiralFont, 12 );
     stroke( 0 );
-    fill( 0 );
-    if( hasData ) 
+    fill( 90 );
+    if( hasData ) {
       for( WavePt wp : wavePoints ) {
-        r.putText( wp.funcString, 200, ( wp.serialNum + 1 ) * 12 );
+        r.putText( wp.funcString, 50 + wp.postTime, ( wp.serialNum + 1 ) * 12 );
       } // end for wavePoints
+    }
+    else 
+      drawLabel( r, "No Data For This Class" );
+   r.repositionScrollPosBtns();
   } // end display()
 
 
   
 
-  void drawX() {
-
-  } // end drawX()
+  void drawLabel( View v, String s ) {
+      stroke( popUpTxt );
+      fill( popUpBkgrd );
+      v.putTextSize( 30 );
+      float lx1 = ( ( ( v.x2-v.x1 ) - textWidth( s ) ) / 2 ) - 10;
+      float lx2 = ( v.x2-v.x1 ) - (((v.x2-v.x1)-textWidth(s))/2) + 10;
+      float ly1 = ( ((v.y2-v.y1) - v.viewTextSize ) / 2);      
+      float ly2 = (v.y2-v.y1) - ( ( ( v.y2-v.y1 ) - v.viewTextSize ) / 2 ) + 10;
+      
+      rectMode( CORNERS );
+      v.putRect( lx1, ly1, lx2, ly2 );
+      fill( popUpTxt );
+      v.putText( "No Data For This Class", lx1 + 10, ly2 - 10 );
+  } // end drawNoData()
 
 
 

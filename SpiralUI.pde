@@ -57,7 +57,9 @@ class SpiralUI extends AUI {
   if( mouseButton == LEFT ) {
     int whichOne = getPressedArrSpButton();
     if( whichOne == 0 ) {       // "-> PDF"
+      /* Do Nothing - temporary, until solutin for applet is implemented
       owner.owner.savePDF = true;
+      */
     }
     else if( whichOne == 1 ) {  // "Font +"
       currentSpiral.spokeFontSize++;

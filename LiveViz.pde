@@ -130,7 +130,7 @@ void initWave( String[] aDetails ) {
 
 
 void setupDisplayElements() {
-  size( 1280, 700 );
+  size( 1180, 1000 );
   smooth();
   spiralFont = loadFont( "SansSerif.plain-12.vlw" ); // set as global to make changing easier
   textFont( spiralFont );

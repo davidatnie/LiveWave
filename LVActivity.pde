@@ -59,9 +59,7 @@ class LVActivity extends Activity {
   void render() {
     // there's no drawing routines here, only updating datastream
     // from the database
-    println( "now running LVActivity.updateDatastream()" );
     updateDatastream();
-    println( "value of hasNewDatastream is: " + hasNewDatastream );
   } // end render()
 
 
@@ -70,7 +68,6 @@ class LVActivity extends Activity {
   void updateDatastream() {
     // poll database every five seconds
     int now = millis();
-    println( "elapsed: " + ( now - lastRequestTime ) );
     if( now - lastRequestTime > 5000 ) {
       println( htmlRequest );
       if( htmlRequest == null ) {

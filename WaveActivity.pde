@@ -13,7 +13,7 @@ class WaveActivity extends LVActivity {
   // Constructor
   WaveActivity( LiveViz o ) {
     super( o );
-    bgColor = color( 255,255,255 );
+    bgColor = color( 0, 0, 0 );
     wvaUI = new WaveUI( this );
     aUI = wvaUI;
 
@@ -33,22 +33,12 @@ class WaveActivity extends LVActivity {
 
 
   void render() {
-    println( "in WaveActivity.render()" );
     super.render();
-    println( "just called super.render(), value of hasNewDatastream is: " + hasNewDatastream );
     if( hasNewDatastream )
       processDatastream( databaseStream );
     prepForNextDatastream();
     View renderer = aUI.view;
     renderer.updateOffsetRenders();
-    fill( 250, 0 , 250 );
-    renderer.putRect( 50, 100, 300, 400 );
-    fill( 0, 200, 160 );
-    renderer.putTextFont( spiralFont, 60 );
-    renderer.putText( "Aloha!", 1000, 900 );
-    fill( 0, 100, 250 );
-    renderer.putTextSize( 10 );
-    renderer.putText( "rockin' awesome!", 700, 600 );
     wave.display( renderer );
   } // end render()
 

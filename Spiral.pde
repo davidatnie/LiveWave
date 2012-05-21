@@ -525,6 +525,7 @@ class Spiral extends Section {
 
 
   void markUncleaned( Spoke _s, float sAngle ) {        // markings for "#Name?" function strings
+    /* Do Nothing - this maybe temporary
     float xOrientation = 0;
     float yOrientation = 0;
     if( ( sAngle % 360 > 90 ) && ( sAngle % 360 < 270 ) ) {
@@ -543,6 +544,7 @@ class Spiral extends Section {
       noStroke();
       rect( 0, 0, xOrientation, yOrientation );
     }            
+    */
   } // end markUncleaned()
         
         

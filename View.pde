@@ -19,6 +19,7 @@ class View {
   ScrollPosButton sbVer, sbHor;         // the two draggable scrollbars
   float step;  
   float xOffsetRender, yOffsetRender;
+  boolean scrollableVer, scrollableHor;
 
 
 
@@ -78,6 +79,8 @@ class View {
     sbVer = new ScrollPosButton( this, x2a, y1a + 20, x2, y2a - 20, 4, "VERTICAL" );
     sbHor = new ScrollPosButton( this, x1a + 20, y2a, x2a - 20, y2, 5, "HORIZONTAL");
     step = 30;
+    scrollableVer = determineScrollable( sbVer );
+    scrollableHor = determineScrollable( sbHor );
     
     img = null;
     
@@ -375,6 +378,7 @@ class View {
     noFill();
     rectMode( CORNERS );
     rect( x1, y1, x2, y2 );
+    drawDebugInfo();
     fill( 60, 60, 60 );
     rect( x1sbv, y1sbv, x2sbv, y2sbv );
     rect( x1sbh, y1sbh, x2sbh, y2sbh );
@@ -401,7 +405,22 @@ class View {
     triangle( sbLeft.x2 - 5, sbLeft.y2 - 5, sbLeft.x1 + 5, sbLeft.y1 +10, sbLeft.x2 - 5, sbLeft.y1 + 5 );
     triangle( sbRight.x1 + 5, sbRight.y2 - 5, sbRight.x2 - 5, sbRight.y1 + 10, sbRight.x1 + 5, sbRight.y1 + 5 );
 
+
   } // end display()
+  
+  
+  
+  
+  void drawDebugInfo() {
+    fill( 128 );
+    textSize( 10 );
+    text( "view Width x view Height: " + ( x2a-x1a ) + " " + (y2a-y1a), x1, y1 + 10 );
+    text( "contentWidth x contentHeight: " + contentWidth + " " + contentHeight, x1, y1 + 20 );
+    text( "sbHor.x1 sbHor.x2: " + sbHor.x1 + " " + sbHor.x2, x1, y1 + 30 );
+    text( "sbVer.y1 sbVer.y2: " + sbVer.y1 + " " + sbVer.y2, x1, y1 + 40 );
+    text( "xScrollPos2, yScrollPos2: " + xScrollPos2 + " " + yScrollPos2, x1, y1 + 50 );
+
+  } // end drawDebugInfo()
   
   
   
@@ -421,10 +440,39 @@ class View {
   // calculates new position for the two scrollPosBtns, call this method after every change
   // in the xScrollPoses or yScrollPoses
     sbVer.y1 = map( yScrollPos1, 0, contentHeight, y1+20, y2a - 20 );
-    sbVer.y2 = map( yScrollPos2, 0, contentHeight, y1+20, y2a - 20 );
+    if( yScrollPos2 < contentHeight )
+      sbVer.y2 = map( yScrollPos2, 0, contentHeight, y1+20, y2a - 20 );
+    else
+      sbVer.y2 = y2a - 20;
     sbHor.x1 = map( xScrollPos1, 0, contentWidth, x1a + 20, x2a - 20 );
-    sbHor.x2 = map( xScrollPos2, 0, contentWidth, x1a + 20, x2a - 20 );
-  } 
+    if( xScrollPos2 < contentWidth )
+      sbHor.x2 = map( xScrollPos2, 0, contentWidth, x1a + 20, x2a - 20 );
+    else
+      sbHor.x2 = x2a - 20;
+    updateScrollables();
+  } // end repositionScrollPosBtns()
+  
+  
+  
+  
+  void updateScrollables() {
+    scrollableVer = determineScrollable( sbVer );
+    scrollableHor = determineScrollable( sbHor );
+  } // end updateScrollables()
+  
+  
+  
+  
+  boolean determineScrollable( ScrollPosButton scpos ) {
+    boolean ret = true;
+    if( scpos.equals( sbVer ) )
+      if( scpos.y1 == y1+20 && scpos.y2 == y2a-20 ) // can't scroll if scrollposbutton occupies the whole scrollbar
+        ret = false;
+    else if( scpos.equals( sbHor ) )
+      if( scpos.x1 == x1a+20 && scpos.x2 == x2a-20 )
+        ret = false;
+    return ret;
+  } // end determineScrollable()
 
 
 
@@ -506,15 +554,15 @@ class View {
 
 
   void updateDrag() {
-    if( sbVer.over )
-      sbVer.onDrag = true;
-    else if( sbHor.over )
+    if( sbVer.over && scrollableVer )
+        sbVer.onDrag = true;
+    else if( sbHor.over && scrollableHor )
       sbHor.onDrag = true;
       
     if( sbVer.onDrag ) {
       float mouseYAnchor = pmouseY;
-      float yGap = yScrollPos1 - mouseYAnchor;
-      yScrollPos1 = mouseY + yGap;
+      float yGap = mouseY - mouseYAnchor;
+      yScrollPos1 = map( sbVer.y1 + yGap, y1+20, y2a - 20, 0, contentHeight );
       yScrollPos1 = constrain( yScrollPos1, 0, contentHeight - viewHeight );
       yScrollPos2 = yScrollPos1 + viewHeight;
       reposition();
@@ -522,8 +570,8 @@ class View {
 
     if( sbHor.onDrag ) {
       float mouseXAnchor = pmouseX;
-      float xGap = xScrollPos1 - mouseXAnchor;
-      xScrollPos1 = mouseX + xGap;
+      float xGap = mouseX - mouseXAnchor;
+      xScrollPos1 = map( sbHor.x1 + xGap, x1a + 20, x2a - 20, 0, contentWidth );
       xScrollPos1 = constrain( xScrollPos1, 0, contentWidth - viewWidth );
       xScrollPos2 = xScrollPos1 + viewWidth;
       reposition();

@@ -8,8 +8,8 @@ class WaveUI extends AUI {
   // Constructor
 
   WaveUI( WaveActivity o ) {
-    super( 350, 200, width, height );
-    view.putBgColor( color( 255, 200, 0 ) );
+    super( 350, 200, 1050, 750 );
+    view.putBgColor( color( 255, 220, 200 ) );
     owner = o;
   } // end constructor
 
