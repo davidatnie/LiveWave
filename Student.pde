@@ -14,7 +14,7 @@ class Student {
   Student( Table t, int row, int sn ) {
     serialNum = sn;
     dispOrder = serialNum;
-    studentID = t.getString( row, 3 );
+    studentID = t.getString( row, 1 );
     wavePoints = new ArrayList(); 
     // wavePoints are NOT added here, 
     // but via Wave.addWavePoints() instead.

@@ -8,8 +8,14 @@ class WaveUI extends AUI {
   // Constructor
 
   WaveUI( WaveActivity o ) {
-    super( 350, 200, 1050, 750 );
+    super( 300, 200, 1150, 750 );
     view.putBgColor( color( 255, 220, 200 ) );
+    /*
+    createDropdown( o.x1Frame + 500, o.y2Frame - 30, o.x1Frame + 780, o.y2Frame - 10, getNextIndexArrDropdowns(), "BLAH :" );
+    Dropdown d = arrDropdowns.get( 0 );
+    String[] bleh = { "a", "b", "c" };
+    d.buildDDItems( bleh );
+    */
     owner = o;
   } // end constructor
 
@@ -22,6 +28,8 @@ class WaveUI extends AUI {
   void executeMousePressed() {
     if( mouseButton == LEFT ) {
       processClickedView();
+      // For Dropdowns
+      processClickedDropdown();
     }
   } // end executeMousePressed()
 

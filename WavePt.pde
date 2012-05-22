@@ -17,7 +17,9 @@ class WavePt extends Function {
   //
     super( t, row, tempSN );
     owner = o;
+    println( " studentID " + studentID );
     student = owner.getStudent( studentID );
+    println( "student with ID " + studentID + " added : " + ( student != null ) );
     isSelected = false;
     annotation = "";
     intensityScore = 0;
@@ -34,7 +36,7 @@ class WavePt extends Function {
   // its postTime from range of owner.minPostTime ~ owner.maxPostTime
   // to range of 0 ~ owner.maxRad  
   // 
-    waveRad = map( postTime, owner.minPostTime, owner.maxPostTime, 0, owner.maxRad );
+    waveRad = map( postTime, 0, owner.maxPostTime, 0, owner.maxRad );
   } // end updateWaveRad()
 
   void updateWaveRadC() {

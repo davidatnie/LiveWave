@@ -8,11 +8,11 @@ class Wave extends Section {
   // The following fields also exist in class Spiral, consider
   // moving them upclass to become members of class Section instead
   Post_Time cExerciseStart, cMaxPostTime, cMinPostTime, cDuration;
-  int maxPostTime, minPostTime;
+  //int maxPostTime, minPostTime;
   String title;
   
   float x, y, xRibbon, yRibbon;
-  int maxRad, maxRibbonLength, oneMinLength;
+  float maxRad, maxRibbonLength, ribbonDepthOffset, oneMinLength, viewPrintOffset;
 
   int maxLevel, stepUpWindow, stepDownWindow, resetWindow;
   float rgbPropRate, rgbSmoothRate;
@@ -33,10 +33,13 @@ class Wave extends Section {
     maxRad = 125;
 
     // variables for the Ribbon, should just make this into an object instead
-    xRibbon = 475;
-    yRibbon = 50;
-    maxRibbonLength = 700;
+   
     oneMinLength = 60;
+    maxRibbonLength = 10 * oneMinLength;
+    ribbonDepthOffset = 50;
+      viewPrintOffset = 100;
+      xRibbon = 300 + ribbonDepthOffset + viewPrintOffset;
+      yRibbon = 150;
 
     // properties of the Intensity and Wave coloring
     maxLevel = 20;
@@ -94,6 +97,8 @@ class Wave extends Section {
 	wpNow.intensityScore = 1;
         wpNow.updateWaveRad();
         wpNow.updateWaveRadC();
+        Student sNow = getStudent( wpNow.student.studentID );
+        sNow.wavePoints.add( wpNow );
 
       } else { // for subsequent wavePoints
 
@@ -107,12 +112,16 @@ class Wave extends Section {
 	  wpNow.intensityScore = constrain( wpNow.intensityScore, 1, maxLevel ); // make sure its within the range
 	  wpNow.updateWaveRad();
           wpNow.updateWaveRadC();
+          Student sNow = getStudent( wpNow.student.studentID );
+          sNow.wavePoints.add( wpNow );
 
 	} else if( lag > resetWindow ) {
 
 	  wpNow.intensityScore = 1; // if lag too long, reset back to 1
 	  wpNow.updateWaveRad();
 	  wpNow.updateWaveRadC();
+          Student sNow = getStudent( wpNow.student.studentID );
+          sNow.wavePoints.add( wpNow );
 
 	} else {
 
@@ -120,7 +129,9 @@ class Wave extends Section {
 	  wpNow.intensityScore = constrain( wpNow.intensityScore, 1, maxLevel );
 	  wpNow.updateWaveRad();
           wpNow.waveRadc =color( floor( wpNow.intensityScore * rgbSmoothRate ) + 15 ); // uses rgbSmoothRate instead of rgbPropRate (different from WavePt.updateWaveRadC() )
-	}
+	  Student sNow = getStudent( wpNow.student.studentID );
+          sNow.wavePoints.add( wpNow );
+        }
       }	
     } // end for i
   } // end processWavePoints()
@@ -149,9 +160,7 @@ class Wave extends Section {
       Function tf = tempFuncs.get( i );
       int dup = 0;
       int sumDup = 0;
-      println( students.size() );
       if( students.size() == 0 ) { // first entry of the students list
-        println( "tempTable's size is: " + tempTable.getRowCount() );
         students.add( new Student( tempTable, i + 1, students.size() ) );
       } else {
         for( int j = 0; j < students.size(); j++ ) { // subsequent entry to the spokes list, need to check fo duplication
@@ -187,14 +196,27 @@ class Wave extends Section {
     r.putTextFont( spiralFont, 12 );
     stroke( 0 );
     fill( 90 );
+
     if( hasData ) {
-      for( WavePt wp : wavePoints ) {
+      int printPos = 0;
+      for( Student s : students ) {
+        printPos++;
         fill( 0 );
-        r.putText( wp.funcString, 50 + wp.postTime, ( wp.serialNum + 1 ) * 12 );
-        fill( 0,0,0,0 );
-        stroke( wp.waveRadc );
-	ellipseMode( CENTER );
-	ellipse( wp.x, wp.y, wp.waveRad, wp.waveRad );
+        r.putText( s.studentID, 10, printPos * 15 );
+        
+        for( WavePt wp : wavePoints ) {
+          printPos++;
+	  float x1Scr = viewPrintOffset + wp.postTime - textWidth( wp.funcString ) - 4;
+	  float x2Scr = viewPrintOffset + wp.postTime;
+	  float y2Scr = printPos * 15;
+	  float y1Scr = y2Scr - r.viewTextSize;
+          stroke( 1255, 90, 50 ); // orangey color for Live mode, can't assess for Hit/No-Hit
+	  strokeWeight( 3 );
+	  r.putLine( x2Scr, y1Scr, x2Scr, y2Scr );
+	  strokeWeight( 1 );
+          fill( 0 );
+          r.putText( wp.funcString, x1Scr, y2Scr );
+        }
       } // end for wavePoints
     }
     else 
@@ -205,8 +227,48 @@ class Wave extends Section {
   
   
   void drawWave() {
+    // draw title
+    textSize( 20 );
+    fill( 0, 255, 0 );
+    text( exerciseTitle, ( ( ( width - 300 ) - ( textWidth( exerciseTitle ) ) ) / 2 ) + 300 , 25 );
+    // draw ribbon axes
+    stroke( 0, 255, 0 );
+    line( xRibbon, yRibbon, xRibbon + maxRibbonLength, yRibbon );
+    line( xRibbon, yRibbon, xRibbon, yRibbon-30 );
+    line( xRibbon, yRibbon, xRibbon - ribbonDepthOffset, yRibbon + ribbonDepthOffset );
+    int i = 0;
+    while( i < maxRibbonLength / oneMinLength ) {
+      i ++;
+      float notch = ( i * oneMinLength ) + xRibbon;
+      line( notch, yRibbon - 10, notch , yRibbon );
+      if( i % 5 == 0 ) {
+        fill( 0, 255, 0 );
+	textSize( 8 );
+	text( i + " mins", notch - 10, yRibbon - 12 );
+      }
+    }
+    
     if( hasData ) {
       for( WavePt wp : wavePoints ) {
+        
+        // draw Wave
+        noFill();
+        stroke( wp.waveRadc );
+	ellipseMode( RADIUS );
+	ellipse( x, y, wp.waveRad, wp.waveRad );
+	
+	float xOnRibbon = map( wp.postTime, 0, 60*10, 0, maxRibbonLength ) + xRibbon;
+  
+        // draw Ribbon
+	line( xOnRibbon, yRibbon, xOnRibbon - ribbonDepthOffset, yRibbon + ribbonDepthOffset );
+        if( wp.postTime == maxPostTime ) {	      
+          stroke( 1255, 90, 50 ); // orangey color
+          strokeWeight( 1 );
+            ellipse( x, y, wp.waveRad + 5, wp.waveRad + 5 );
+            line( xOnRibbon + 5, yRibbon, xOnRibbon + 5 - ribbonDepthOffset, yRibbon + ribbonDepthOffset );
+            line( xOnRibbon + 5, yRibbon - 20, xOnRibbon + 5, yRibbon );
+            strokeWeight( 1 );
+        }
 
       } // end for wavePoints
     }
@@ -241,8 +303,10 @@ class Wave extends Section {
   //
     Student ret = null;
     for( Student sdt : students )
-      if( sdt.studentID.equals(sID) )
+      if( sdt.studentID.equals(sID) ) {
         ret = sdt;
+        break;
+      }
     return ret;
   } // end getStudent()
 

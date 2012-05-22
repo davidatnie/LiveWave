@@ -271,6 +271,7 @@ class Spiral extends Section {
 
 
   void drawYolk() {
+    ellipseMode( DIAMETER );
     if( !hasData ) {           // Message display to notify user that no data is available for this class
       stroke( popUpTxt );
       fill( popUpBkgrd );

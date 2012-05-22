@@ -55,10 +55,18 @@ class LVActivity extends Activity {
 
 
 
-  
+  void prerender() {
+    super.prerender();
+  } // end prerender()
+    
+    
+    
+    
   void render() {
-    // there's no drawing routines here, only updating datastream
-    // from the database
+  //  draw background and update datastream
+  // from the database
+  //
+    super.drawFrameBkground();
     updateDatastream();
   } // end render()
 

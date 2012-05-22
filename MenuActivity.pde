@@ -15,7 +15,7 @@ class MenuActivity extends Activity {
   // Constructor
 
   MenuActivity( LiveViz o ) {
-    super( o, 250, height/3, width-250, height*2/3 );    
+    super( o, 250, height/3, width-250, height*2/3 - 100 );    
     h = new Header( "http://203.116.116.34:80/getAllActivities" );
     mUI = new MenuUI( this );
     aUI = mUI;
@@ -47,9 +47,14 @@ class MenuActivity extends Activity {
 
 
 
+  void prerender() {
+    super.prerender();
+  } // end prerender()
+  
+  
+  
   
   void render() {
-    // there's nothing to render in MenuActivity
   } // end render()
   
   

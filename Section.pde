@@ -173,7 +173,7 @@ class Section {
     //lastCountForFuncs = funcs.size();
     updateHasData();
     updateMinMaxPostTime();
-    println( "funcs count is now: " + funcs.size() + " [ DONE ]" );
+    println( "funcs count is now: " + funcs.size() + " maxPostTime is now: " + maxPostTime + " [ DONE ]" );
   } // end populateFuncs()
 
 

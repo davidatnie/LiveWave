@@ -34,19 +34,26 @@ abstract class Activity {
   // Methods
 
   void display() {
-    //drawBackground();
-    //applyMaskBkground();
-    makeMasks();
+    makeMaskBkground();
+    prerender();
+    makeMaskView();
     render();
-    // makeMasks();
-    // applyMasks();
+    applyMaskView();
+    applyMaskBkground();
     aUI.update();
     aUI.display();
   } // end display()
   
 
 
-
+  
+  void prerender() {
+    drawFrameBkground();
+  } // end prerender();
+  
+  
+  
+  
   abstract void render();
   // This is where the main drawing routines should be specified by the child classes
 
@@ -63,8 +70,9 @@ abstract class Activity {
   
   
   void applyMasks() {
+    applyMaskBkground();
     applyMaskView();
-    applyMaskBkground();  
+    //applyMaskBkground();  
   } // end applyMasks()
   
   
@@ -101,7 +109,7 @@ abstract class Activity {
 
 
   void makeMaskView() {
-    drawFrameBkground();
+    //drawFrameBkground();
     if( aUI.view != null ) { // only need to make mask if aUI has a view object
       // get image of the Activity frame
       maskView = get( ( int )x1Frame, ( int )y1Frame, ( int )(x2Frame - x1Frame), ( int )(y2Frame - y1Frame) );
@@ -151,22 +159,22 @@ abstract class Activity {
 
   void applyMaskView() {
     if( aUI.view != null ) {
-      if( maskView == null ) {
+      if( maskView == null )
         makeMaskView();
-      }
-      if( maskView != null ) {
+      else 
         image( maskView, x1Frame, y1Frame );
-      }
     }
   } // end applyMaskView()
 
 
 
   void applyMaskBkground() {
-    if( maskBkground == null )
-      makeMaskBkground();
-    if( maskBkground != null )
-      image( maskBkground, 0, 0 );
+    if( x2Frame - x1Frame < width || y2Frame - y1Frame < height ) { // only apply backgrop mask if activity's dimensions are smaller than application's window dimension
+      if( maskBkground == null )
+        makeMaskBkground();
+      else
+        image( maskBkground, 0, 0 );
+    }
   } // end applyMaskBkground()
 
 

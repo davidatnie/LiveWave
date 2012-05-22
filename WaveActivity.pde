@@ -32,6 +32,14 @@ class WaveActivity extends LVActivity {
 
 
 
+  void prerender() {
+    super.prerender();
+    wave.drawWave();
+  } // end prerender()
+  
+  
+  
+  
   void render() {
     super.render();
     if( hasNewDatastream )
@@ -40,7 +48,6 @@ class WaveActivity extends LVActivity {
     View renderer = aUI.view;
     renderer.updateOffsetRenders();
     wave.display( renderer );
-    wave.drawWave();
   } // end render()
 
 
