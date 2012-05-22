@@ -38,7 +38,8 @@ abstract class Activity {
     //applyMaskBkground();
     makeMasks();
     render();
-    applyMasks();
+    // makeMasks();
+    // applyMasks();
     aUI.update();
     aUI.display();
   } // end display()

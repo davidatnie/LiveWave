@@ -378,7 +378,6 @@ class View {
     noFill();
     rectMode( CORNERS );
     rect( x1, y1, x2, y2 );
-    drawDebugInfo();
     fill( 60, 60, 60 );
     rect( x1sbv, y1sbv, x2sbv, y2sbv );
     rect( x1sbh, y1sbh, x2sbh, y2sbh );

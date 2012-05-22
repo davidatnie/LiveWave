@@ -40,6 +40,7 @@ class WaveActivity extends LVActivity {
     View renderer = aUI.view;
     renderer.updateOffsetRenders();
     wave.display( renderer );
+    wave.drawWave();
   } // end render()
 
 

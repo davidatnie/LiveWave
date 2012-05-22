@@ -112,6 +112,8 @@ void mouseReleased() {
 
 
 void initSpiral( String[] aDetails ) {
+  println( "displaying contents of aDetails : " );
+  println( aDetails );
   spa = new SpiralActivity( this );
   currentActivity = spa;
   spa.startSpiral( aDetails );

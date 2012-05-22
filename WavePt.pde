@@ -3,7 +3,8 @@ class WavePt extends Function {
   // Fields
 
   int dispOrder;
-  float intensityScore, x, y;
+  float intensityScore, waveRad, x, y;
+  color waveRadc;
   Student student;
   Wave owner;
   String annotation;
@@ -20,13 +21,26 @@ class WavePt extends Function {
     isSelected = false;
     annotation = "";
     intensityScore = 0;
-    x = 0;
-    y = 0;
+    x = o.x;
+    y = o.y;
   } // end constructor
 
 
 
   // Methods
+
+  void updateWaveRad() {
+  // calculates the radius for this wavePoint, by mapping
+  // its postTime from range of owner.minPostTime ~ owner.maxPostTime
+  // to range of 0 ~ owner.maxRad  
+  // 
+    waveRad = map( postTime, owner.minPostTime, owner.maxPostTime, 0, owner.maxRad );
+  } // end updateWaveRad()
+
+  void updateWaveRadC() {
+    waveRadc = color( floor( intensityScore * owner.rgbPropRate ) + 15 ); // color range is from 15 to 255 NEED TO CONFIRM
+  } // end updateWaveRadC()
+
 
 
 
