@@ -34,8 +34,7 @@ class WaveActivity extends LVActivity {
 
   void prerender() {
     super.prerender();
-    View renderer = aUI.view;
-    wave.drawWave( renderer );
+    wave.drawWave();
   } // end prerender()
   
   

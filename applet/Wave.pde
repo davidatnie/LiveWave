@@ -4,7 +4,6 @@ class Wave extends Section {
   
   ArrayList <Student> students;
   ArrayList <WavePt> wavePoints;
-  Ribbon ribbon;
 
   // The following fields also exist in class Spiral, consider
   // moving them upclass to become members of class Section instead
@@ -51,8 +50,6 @@ class Wave extends Section {
     stepDownWindow = resetWindow - stepUpWindow;
     rgbPropRate = ( 255 - 15 ) / maxLevel;
     
-    ribbon = new Ribbon( this );
-
   } // end constructor
 
 
@@ -231,7 +228,7 @@ class Wave extends Section {
   
   
   
-  void drawWave( View r ) {
+  void drawWave() {
     // draw title
     textSize( 20 );
     float x1Title = ( ( ( width - 300 ) - ( textWidth( exerciseTitle ) ) ) / 2 ) + 300;
@@ -243,7 +240,25 @@ class Wave extends Section {
     rect( x1Title - 5, y1Title - 5, x2Title + 5, y2Title + 5 );
         fill( 0, 255, 0 );
     text( exerciseTitle, x1Title, y2Title );
-    
+    // draw ribbon axes
+    fill( 0, 255, 0 );
+    textSize( 10 );
+    text( "Timeline :", xRibbon, yRibbon - 20 - 3 );
+    stroke( 0, 255, 0 );
+    line( xRibbon, yRibbon, xRibbon + maxRibbonLength, yRibbon );
+    line( xRibbon, yRibbon, xRibbon, yRibbon-30 );
+    line( xRibbon, yRibbon, xRibbon - ribbonDepthOffset, yRibbon + ribbonDepthOffset );
+    int i = 0;
+    while( i < maxRibbonLength / oneMinLength ) {
+      i ++;
+      float notch = ( i * oneMinLength ) + xRibbon;
+      line( notch, yRibbon - 10, notch , yRibbon );
+      if( i % 5 == 0 ) {
+        fill( 0, 255, 0 );
+	textSize( 10 );
+	text( i + " mins", notch - 10, yRibbon - 12 );
+      }
+    }
     // draw waveplot label
     fill( 0, 255, 0 );
     textSize( 10 );
@@ -259,18 +274,21 @@ class Wave extends Section {
 	ellipseMode( RADIUS );
 	ellipse( x, y, wp.waveRad, wp.waveRad );
 	
+	float xOnRibbon = map( wp.postTime, 0, 60*10, 0, maxRibbonLength ) + xRibbon;
+  
+        // draw Ribbon
+	line( xOnRibbon, yRibbon, xOnRibbon - ribbonDepthOffset, yRibbon + ribbonDepthOffset );
         /* draw end of contribution
         if( wp.serialNum == wavePoints.size() - 1 ) {	      
           stroke( 1255, 90, 50 ); // orangey color
           strokeWeight( 1 );
             ellipse( x, y, wp.waveRad + 1, wp.waveRad + 1 );
-
+            line( xOnRibbon + 1, yRibbon, xOnRibbon + 1 - ribbonDepthOffset, yRibbon + ribbonDepthOffset );
             line( xOnRibbon + 1, yRibbon - 20, xOnRibbon + 1, yRibbon );
             strokeWeight( 1 );
         }
         */
       } // end for wavePoints
-      ribbon.display( r );
     }
   } // end drawWave()
 

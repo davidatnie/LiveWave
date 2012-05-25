@@ -43,10 +43,10 @@ void setup() {
   bk = loadImage( "SST_logo.png" );
 
   // temporary block 
-  if ( arduinoPort == null ) {
+  if( arduinoPort == null ) {
     myJays = new JPointer[ 2 ];
-    myJays[0] = new JPointer( 0, 0, color(0, 0, 0), color(0, 0, 0) );
-    myJays[1] = new JPointer( 0, 0, color(0, 0, 0), color(0, 0, 0) );
+    myJays[0] = new JPointer( 0, 0, color(0,0,0), color(0,0,0) );
+    myJays[1] = new JPointer( 0, 0, color(0,0,0), color(0,0,0) );
   }
 
   savePDF = false;
@@ -56,7 +56,7 @@ void setup() {
 
 
 void draw() {
-  if ( savePDF )
+  if( savePDF )
     startSaveToPDF();
 
   int i = 0;
@@ -69,9 +69,10 @@ void draw() {
     i += bk.width;
   }
   currentActivity.display();
-
-  if ( savePDF )
+  
+  if( savePDF )
     endSaveToPDF();
+ 
 } // end draw()
 
 
@@ -83,7 +84,7 @@ void mousePressed() {
     background( 180 );
     if ( currentActivity == menu & spa != null )
       currentActivity = spa;
-    else if ( currentActivity == spa & wva != null) {
+    else if( currentActivity == spa & wva != null) {
       currentActivity = wva;
     }
     else { 
@@ -159,14 +160,14 @@ float myRound( float val, int dp ) {
 
 
 void netEvent( HTMLRequest ml ) {
-  if ( currentActivity == spa )
+  if( currentActivity == spa )
   {
     spa.dataWholeChunk = ml.readRawSource();
   }
-  else if ( currentActivity == wva ) {
+  else if( currentActivity == wva ) {
     wva.dataWholeChunk = ml.readRawSource();
   }
-  println( "done passing html input to dataWholeChunk" );
+  println( "done passing html input to dataWholeChunk" ); 
 }
 
 
@@ -185,4 +186,3 @@ void endSaveToPDF() {
   endRecord();      // end saving to PDF
   savePDF = false;
 } // end endSaveToPDF()
-

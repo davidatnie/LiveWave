@@ -6,7 +6,6 @@ class View {
 
   float x1, y1, x2, y2;              // edge to edge coordinate ( including scroll bars )
   float x1a, y1a, x2a, y2a;          // viewing area edge coordinates ( excluding scroll bars )
-  float borderN, borderS, borderE, borderW; // the north south east west border of the view ( white space )
   float x1sbv, y1sbv, x2sbv, y2sbv;  // scroll bar Vertical - coordinates
   float x1sbh, y1sbh, x2sbh, y2sbh;  // scroll bar Horizontal - coordinates
   float viewWidth, viewHeight;       
@@ -66,10 +65,6 @@ class View {
     
     viewWidth = x2a - x1a;
     viewHeight = y2a - y1a;
-    borderN = 0;
-    borderS = 0;
-    borderE = 50;	
-    borderW = 0;
     
     xScrollPos1 = 0;
     yScrollPos1 = 0;
@@ -89,8 +84,8 @@ class View {
     
     img = null;
     
-    contentHeight = 0+borderN+borderS;
-    contentWidth = 0+borderE+borderW;
+    contentHeight = 0;
+    contentWidth = 0;
 
     bgColor = color( 255, 255, 255 ); // setting white as the default color
 
@@ -188,12 +183,12 @@ class View {
   
   
   void updateContentDimension( float xCheck, float yCheck ) {
-    if( contentWidth < xCheck +borderE+borderW ) {
-      contentWidth = xCheck +borderE+borderW;
+    if( contentWidth < xCheck ) {
+      contentWidth = xCheck;
       sbHor.reposition( getScrollPos() ); 
     }
-    if( contentHeight < yCheck +borderN+borderS ) {
-      contentHeight = yCheck +borderN+borderS;
+    if( contentHeight < yCheck ) {
+      contentHeight = yCheck;
       sbVer.reposition( getScrollPos() );
     }
   } // end updateContentDimension()
@@ -289,8 +284,8 @@ class View {
 
   void setImage( PImage pimg ) {
     img = pimg;
-    setContentHeight( pimg.height +borderN+borderS );
-    setContentWidth( pimg.width +borderE+borderW );
+    setContentHeight( pimg.height );
+    setContentWidth( pimg.width );
   } // end setImage()
   
 
