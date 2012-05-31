@@ -77,9 +77,15 @@ class WaveActivity extends LVActivity {
 
 
 
-
-  String toString() {
-    return( "This is WaveActivity" );
+  Wave getWave() {
+    return wave;  
+  } // end getWave()
+  
+  
+  
+  
+  String toString() { 
+    return( "This is WaveActivity." );
   } // end toString()
 
 

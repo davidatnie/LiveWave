@@ -23,7 +23,12 @@ class MenuUI extends AUI {
     createDropdown( o.x1Frame + 300, o.y1Frame + 70, o.x1Frame + 480, o.y1Frame + 90, getNextIndexArrDropdowns(), "Teacher :" ); // Teacher dropdown
     createDropdown( o.x1Frame + 300, o.y1Frame + 120, o.x1Frame + 480, o.y1Frame + 140, getNextIndexArrDropdowns(), "Class :" ); // Class dropdown
     createDropdown( o.x1Frame + 300, o.y1Frame + 170, o.x1Frame + 480, o.y1Frame + 190, getNextIndexArrDropdowns(), "Activity :" ); // Activity dropdown
-
+    /*
+    createDropdown( o.x1Frame + 300, o.y2Frame - 20, o.x1Frame + 480, o.y2Frame, getNextIndexArrDropdowns(), "Test :" );
+    String[] testFeed = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k" };
+    Dropdown dt = arrDropdowns.get( 4 );
+    dt.buildDDItems( testFeed );
+    */
     Dropdown d = arrDropdowns.get( 0 );
     MenuActivity ma = (MenuActivity) owner;
     d.buildDDItems( ma.h.getSchools() );

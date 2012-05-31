@@ -199,39 +199,43 @@ class Wave extends Section {
     r.putTextFont( spiralFont, 12 );
     stroke( 0 );
     fill( 90 );
-
-    if( hasData ) {
-      int printPos = 0;
-      for( Student s : students ) {
-        printPos++;
-        fill( 0 );
-        r.putText( s.studentID, 10, printPos * 15 );
-        
-        for( WavePt wp : wavePoints ) {
-          if( wp.student.studentID.equals( s.studentID ) ) {
-            printPos++;
-	    float x1Scr = viewPrintOffset + wp.postTime - textWidth( wp.funcString ) - 4;
-	    float x2Scr = viewPrintOffset + wp.postTime;
-	    float y2Scr = printPos * 15;
-	    float y1Scr = y2Scr - r.viewTextSize;
-            stroke( 1255, 90, 50 ); // orangey color for Live mode, can't assess for Hit/No-Hit
-	    strokeWeight( 3 );
-	    r.putLine( x2Scr, y1Scr, x2Scr, y2Scr );
-	    strokeWeight( 1 );
-            fill( 0 );
-            r.putText( wp.funcString, x1Scr, y2Scr );
-          }
-        } // end for wavePoints
-      } // end for students
-    }
+    if( hasData )
+      printFunctions( r );
     else 
-      drawLabel( r, "No Data For This Class" );
+      drawLabel( "No Data For This Class", 30, r, "CENTER" );
    r.repositionScrollPosBtns();
   } // end display()
   
   
+
   
+  void printFunctions( View r ) {
+  // prints the Function equations on the View
+  // 
+    int printPos = 0;
+
+    for( Student s : students ) {
+      printPos++;
+      s.display( r, printPos );
+              
+      for( WavePt wp : wavePoints ) {
+        if( wp.student.studentID.equals( s.studentID ) ) {
+
+          printPos++;
+          wp.display( r, printPos );
+        } else {
+          //wp.hide( r );  
+        }
+      } // end for wavePoints
+    } // end for students
+  } // end printFunctions()
+
+
+
+
   void drawWave( View r ) {
+  // draws the Wave plot and the Ribbon / timeline plot
+  //
     // draw title
     textSize( 20 );
     float x1Title = ( ( ( width - 300 ) - ( textWidth( exerciseTitle ) ) ) / 2 ) + 300;
@@ -277,21 +281,38 @@ class Wave extends Section {
 
   
 
-  void drawLabel( View v, String s ) {
+  void drawLabel( String s, int tSize, View v, String orientation  ) {
   // displays a textbox containing a text in the middle of the View
   // 
       stroke( popUpTxt );
       fill( popUpBkgrd );
-      v.putTextSize( 30 );
-      float lx1 = ( ( ( v.x2-v.x1 ) - textWidth( s ) ) / 2 ) - 10;
-      float lx2 = ( v.x2-v.x1 ) - (((v.x2-v.x1)-textWidth(s))/2) + 10;
-      float ly1 = ( ((v.y2-v.y1) - v.viewTextSize ) / 2);      
-      float ly2 = (v.y2-v.y1) - ( ( ( v.y2-v.y1 ) - v.viewTextSize ) / 2 ) + 10;
+      v.putTextSize( tSize );
       
+      float lx1 = 0;
+      float  lx2 = 0;
+      float ly1 = lx1 + textWidth( s );
+      float ly2 = ly1 + v.viewTextSize;
+      float whiteSpace = 0;
+
+      // right now only have three types of orientation: CENTER / MOUSE and default (all others )
+      if( orientation.equals( "CENTER" ) ) {
+        whiteSpace = 10;
+        lx1 = ( ( ( v.x2-v.x1 ) - textWidth( s ) ) / 2 ) - whiteSpace;
+	lx2 = lx1 + textWidth( s ) + 2*whiteSpace;
+        ly1 = ( ((v.y2-v.y1) - v.viewTextSize ) / 2) - whiteSpace;      
+	ly2 = ly1 + v.viewTextSize + 2*whiteSpace;
+	
+      } else if( orientation.equals( "MOUSE" ) ) {
+        whiteSpace = 5;
+        lx1 = (mouseX - v.x1a) - ( textWidth( s ) / 2 ) - whiteSpace;
+        lx2 = lx1 + textWidth(s) + 2*whiteSpace;
+        ly1 = ( ((mouseY - v.y1a) - v.viewTextSize )) - 5 - whiteSpace;      
+        ly2 = ly1 + v.viewTextSize + 2*whiteSpace;
+      }
       rectMode( CORNERS );
       v.putRect( lx1, ly1, lx2, ly2 );
       fill( popUpTxt );
-      v.putText( "No Data For This Class", lx1 + 10, ly2 - 10 );
+      v.putText( s, lx1 + whiteSpace, ly2 - whiteSpace );
   } // end drawLabel()
 
 

@@ -4,6 +4,7 @@ class Wave extends Section {
   
   ArrayList <Student> students;
   ArrayList <WavePt> wavePoints;
+  Ribbon ribbon;
 
   // The following fields also exist in class Spiral, consider
   // moving them upclass to become members of class Section instead
@@ -50,6 +51,8 @@ class Wave extends Section {
     stepDownWindow = resetWindow - stepUpWindow;
     rgbPropRate = ( 255 - 15 ) / maxLevel;
     
+    ribbon = new Ribbon( this );
+
   } // end constructor
 
 
@@ -196,39 +199,45 @@ class Wave extends Section {
     r.putTextFont( spiralFont, 12 );
     stroke( 0 );
     fill( 90 );
-
-    if( hasData ) {
-      int printPos = 0;
-      for( Student s : students ) {
-        printPos++;
-        fill( 0 );
-        r.putText( s.studentID, 10, printPos * 15 );
-        
-        for( WavePt wp : wavePoints ) {
-          if( wp.student.studentID.equals( s.studentID ) ) {
-            printPos++;
-	    float x1Scr = viewPrintOffset + wp.postTime - textWidth( wp.funcString ) - 4;
-	    float x2Scr = viewPrintOffset + wp.postTime;
-	    float y2Scr = printPos * 15;
-	    float y1Scr = y2Scr - r.viewTextSize;
-            stroke( 1255, 90, 50 ); // orangey color for Live mode, can't assess for Hit/No-Hit
-	    strokeWeight( 3 );
-	    r.putLine( x2Scr, y1Scr, x2Scr, y2Scr );
-	    strokeWeight( 1 );
-            fill( 0 );
-            r.putText( wp.funcString, x1Scr, y2Scr );
-          }
-        } // end for wavePoints
-      } // end for students
-    }
+    if( hasData )
+      printFunctions( r );
     else 
-      drawLabel( r, "No Data For This Class" );
+      drawLabel( "No Data For This Class", 30, r, "CENTER" );
    r.repositionScrollPosBtns();
   } // end display()
   
   
+
   
-  void drawWave() {
+  void printFunctions( View r ) {
+  // prints the Function equations on the View
+  // 
+    int printPos = 0;
+
+    for( Student s : students ) {
+      printPos++;
+      fill( 0 );
+      r.putTextFont( spiralFont, 12 );
+      r.putText( s.studentID, 10, printPos * 15 );
+        
+      for( WavePt wp : wavePoints ) {
+        if( wp.student.studentID.equals( s.studentID ) ) {
+
+          printPos++;
+          wp.display( r, printPos );
+        } else {
+          //wp.hide( r );  
+        }
+      } // end for wavePoints
+    } // end for students
+  } // end printFunctions()
+
+
+
+
+  void drawWave( View r ) {
+  // draws the Wave plot and the Ribbon / timeline plot
+  //
     // draw title
     textSize( 20 );
     float x1Title = ( ( ( width - 300 ) - ( textWidth( exerciseTitle ) ) ) / 2 ) + 300;
@@ -240,25 +249,7 @@ class Wave extends Section {
     rect( x1Title - 5, y1Title - 5, x2Title + 5, y2Title + 5 );
         fill( 0, 255, 0 );
     text( exerciseTitle, x1Title, y2Title );
-    // draw ribbon axes
-    fill( 0, 255, 0 );
-    textSize( 10 );
-    text( "Timeline :", xRibbon, yRibbon - 20 - 3 );
-    stroke( 0, 255, 0 );
-    line( xRibbon, yRibbon, xRibbon + maxRibbonLength, yRibbon );
-    line( xRibbon, yRibbon, xRibbon, yRibbon-30 );
-    line( xRibbon, yRibbon, xRibbon - ribbonDepthOffset, yRibbon + ribbonDepthOffset );
-    int i = 0;
-    while( i < maxRibbonLength / oneMinLength ) {
-      i ++;
-      float notch = ( i * oneMinLength ) + xRibbon;
-      line( notch, yRibbon - 10, notch , yRibbon );
-      if( i % 5 == 0 ) {
-        fill( 0, 255, 0 );
-	textSize( 10 );
-	text( i + " mins", notch - 10, yRibbon - 12 );
-      }
-    }
+    
     // draw waveplot label
     fill( 0, 255, 0 );
     textSize( 10 );
@@ -274,42 +265,56 @@ class Wave extends Section {
 	ellipseMode( RADIUS );
 	ellipse( x, y, wp.waveRad, wp.waveRad );
 	
-	float xOnRibbon = map( wp.postTime, 0, 60*10, 0, maxRibbonLength ) + xRibbon;
-  
-        // draw Ribbon
-	line( xOnRibbon, yRibbon, xOnRibbon - ribbonDepthOffset, yRibbon + ribbonDepthOffset );
         /* draw end of contribution
         if( wp.serialNum == wavePoints.size() - 1 ) {	      
           stroke( 1255, 90, 50 ); // orangey color
           strokeWeight( 1 );
             ellipse( x, y, wp.waveRad + 1, wp.waveRad + 1 );
-            line( xOnRibbon + 1, yRibbon, xOnRibbon + 1 - ribbonDepthOffset, yRibbon + ribbonDepthOffset );
+
             line( xOnRibbon + 1, yRibbon - 20, xOnRibbon + 1, yRibbon );
             strokeWeight( 1 );
         }
         */
       } // end for wavePoints
+      ribbon.display( r );
     }
   } // end drawWave()
 
 
   
 
-  void drawLabel( View v, String s ) {
+  void drawLabel( String s, int tSize, View v, String orientation  ) {
   // displays a textbox containing a text in the middle of the View
   // 
       stroke( popUpTxt );
       fill( popUpBkgrd );
-      v.putTextSize( 30 );
-      float lx1 = ( ( ( v.x2-v.x1 ) - textWidth( s ) ) / 2 ) - 10;
-      float lx2 = ( v.x2-v.x1 ) - (((v.x2-v.x1)-textWidth(s))/2) + 10;
-      float ly1 = ( ((v.y2-v.y1) - v.viewTextSize ) / 2);      
-      float ly2 = (v.y2-v.y1) - ( ( ( v.y2-v.y1 ) - v.viewTextSize ) / 2 ) + 10;
+      v.putTextSize( tSize );
       
+      float lx1 = 0;
+      float  lx2 = 0;
+      float ly1 = lx1 + textWidth( s );
+      float ly2 = ly1 + v.viewTextSize;
+      float whiteSpace = 0;
+
+      // right now only have three types of orientation: CENTER / MOUSE and default (all others )
+      if( orientation.equals( "CENTER" ) ) {
+        whiteSpace = 10;
+        lx1 = ( ( ( v.x2-v.x1 ) - textWidth( s ) ) / 2 ) - whiteSpace;
+	lx2 = lx1 + textWidth( s ) + 2*whiteSpace;
+        ly1 = ( ((v.y2-v.y1) - v.viewTextSize ) / 2) - whiteSpace;      
+	ly2 = ly1 + v.viewTextSize + 2*whiteSpace;
+	
+      } else if( orientation.equals( "MOUSE" ) ) {
+        whiteSpace = 5;
+        lx1 = (mouseX - v.x1a) - ( textWidth( s ) / 2 ) - whiteSpace;
+        lx2 = lx1 + textWidth(s) + 2*whiteSpace;
+        ly1 = ( ((mouseY - v.y1a) - v.viewTextSize )) - 5 - whiteSpace;      
+        ly2 = ly1 + v.viewTextSize + 2*whiteSpace;
+      }
       rectMode( CORNERS );
       v.putRect( lx1, ly1, lx2, ly2 );
       fill( popUpTxt );
-      v.putText( "No Data For This Class", lx1 + 10, ly2 - 10 );
+      v.putText( s, lx1 + whiteSpace, ly2 - whiteSpace );
   } // end drawLabel()
 
 

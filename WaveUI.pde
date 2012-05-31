@@ -12,10 +12,10 @@ class WaveUI extends AUI {
     view.putBgColor( color( 255, 220, 200 ) );
     /*
     createDropdown( o.x1Frame + 500, o.y2Frame - 30, o.x1Frame + 780, o.y2Frame - 10, getNextIndexArrDropdowns(), "BLAH :" );
-    Dropdown d = arrDropdowns.get( 0 );
-    String[] bleh = { "a", "b", "c" };
-    d.buildDDItems( bleh );
-    */
+     Dropdown d = arrDropdowns.get( 0 );
+     String[] bleh = { "a", "b", "c" };
+     d.buildDDItems( bleh );
+     */
     owner = o;
   } // end constructor
 
@@ -25,9 +25,10 @@ class WaveUI extends AUI {
   // Methods
 
   @Override
-  void executeMousePressed() {
-    if( mouseButton == LEFT ) {
+    void executeMousePressed() {
+    if ( mouseButton == LEFT ) {      
       processClickedView();
+      processClickedWavePoint();
       // For Dropdowns
       processClickedDropdown();
     }
@@ -37,7 +38,7 @@ class WaveUI extends AUI {
 
 
   @Override
-  void executeMouseDragged() {
+    void executeMouseDragged() {
     processDraggedView();
   } // end executeMouseDragged()
 
@@ -45,7 +46,7 @@ class WaveUI extends AUI {
 
 
   @Override
-  void update() {
+    void update() {
     super.update();
   } // end update()
 
@@ -53,11 +54,19 @@ class WaveUI extends AUI {
 
 
   @Override
-  void display() {
+    void display() {
     super.display();
   } // end display()
 
 
 
 
+  void processClickedWavePoint() {
+    WaveActivity downcasted = (WaveActivity) owner;
+    for(  WavePt wp : downcasted.wave.wavePoints ) {
+     if( wp.mouseOver )
+     wp.isSelected = !wp.isSelected;
+     } // end for 
+  } // end processClickedWavePoint()
 } // end class WaveUI
+
