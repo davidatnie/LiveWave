@@ -196,7 +196,7 @@ class Wave extends Section {
 
   void display( View r ) {
     r.clearBackground();
-    r.putTextFont( spiralFont, 12 );
+    r.putTextFont( waveFont, 12 );
     stroke( 0 );
     fill( 90 );
     if( hasData )

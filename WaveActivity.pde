@@ -11,7 +11,7 @@ class WaveActivity extends LVActivity {
 
 
   // Constructor
-  WaveActivity( LiveViz o ) {
+  WaveActivity( LiveWave o ) {
     super( o );
     bgColor = color( 0, 0, 0 );
     wvaUI = new WaveUI( this );

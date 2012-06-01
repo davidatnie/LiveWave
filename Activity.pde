@@ -7,7 +7,7 @@ abstract class Activity {
 
   // Fields
 
-  LiveViz owner;
+  LiveWave owner;
   float x1Frame, x2Frame, y1Frame, y2Frame;
   color bgColor;
   AUI aUI;
@@ -19,7 +19,7 @@ abstract class Activity {
 
   // Constructor
 
-  Activity( LiveViz o, int x1f, int y1f, int x2f, int y2f ) {
+  Activity( LiveWave o, int x1f, int y1f, int x2f, int y2f ) {
     owner = o;
     x1Frame = x1f;
     y1Frame = y1f;

@@ -18,7 +18,7 @@ class Section {
 
   
   // Constructor
-
+/*
   Section( int _activeDataset ) {
     artefacts = new Table( datasets[ _activeDataset ] );
     funcs = new ArrayList();
@@ -52,7 +52,7 @@ class Section {
     // stats will be built after the section's spiral and deployment are built, and after OpUsage has been built
     
   } // end constructor
-  
+  */
 
 
 

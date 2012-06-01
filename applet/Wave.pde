@@ -196,7 +196,7 @@ class Wave extends Section {
 
   void display( View r ) {
     r.clearBackground();
-    r.putTextFont( spiralFont, 12 );
+    r.putTextFont( waveFont, 12 );
     stroke( 0 );
     fill( 90 );
     if( hasData )
@@ -216,10 +216,8 @@ class Wave extends Section {
 
     for( Student s : students ) {
       printPos++;
-      fill( 0 );
-      r.putTextFont( spiralFont, 12 );
-      r.putText( s.studentID, 10, printPos * 15 );
-        
+      s.display( r, printPos );
+              
       for( WavePt wp : wavePoints ) {
         if( wp.student.studentID.equals( s.studentID ) ) {
 

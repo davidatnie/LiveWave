@@ -19,7 +19,7 @@ class LVActivity extends Activity {
 
   // Constructor  
   
-  LVActivity( LiveViz o ) {
+  LVActivity( LiveWave o ) {
     super( o, 0, 0, o.width, o.height ); // maximize window area
     bgColor = color( 255, 255, 255 );    // default bgColor is white
 

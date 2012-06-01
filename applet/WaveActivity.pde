@@ -11,7 +11,7 @@ class WaveActivity extends LVActivity {
 
 
   // Constructor
-  WaveActivity( LiveViz o ) {
+  WaveActivity( LiveWave o ) {
     super( o );
     bgColor = color( 0, 0, 0 );
     wvaUI = new WaveUI( this );
@@ -77,9 +77,15 @@ class WaveActivity extends LVActivity {
 
 
 
-
-  String toString() {
-    return( "This is WaveActivity" );
+  Wave getWave() {
+    return wave;  
+  } // end getWave()
+  
+  
+  
+  
+  String toString() { 
+    return( "This is WaveActivity." );
   } // end toString()
 
 

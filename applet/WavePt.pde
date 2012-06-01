@@ -66,12 +66,14 @@ class WavePt extends Function {
 
     strokeWeight( 1 );
     fill( 0 );
-    v.putTextFont( spiralFont, 12 );	  
+    v.putTextFont( waveFont, 12 );	  
 
     v.putText( funcString, x1Scr, y2Scr );
     setCoordsInView( x1Scr, y1Scr, x2Scr, y2Scr );
     updateMouseOver( v );
-    if ( mouseOver )
+    if( isSelected )
+      drawSelected( v );
+    if( mouseOver )
       // drawLabel( wp.funcString, 20, r, "MOUSE" );
       drawMouseOver( v );
   } // end display()
@@ -105,6 +107,15 @@ class WavePt extends Function {
     else
       mouseOver = false;
   }  // end updateMouseOver()
+
+
+
+
+  void drawSelected( View v ) { 
+    stroke( 255, 0, 0 );
+    noFill();
+    v.putRect( x1InView, y1InView, x2InView, y2InView );
+  } // end drawSelected()
 
 
 

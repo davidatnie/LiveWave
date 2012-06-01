@@ -66,7 +66,7 @@ class WavePt extends Function {
 
     strokeWeight( 1 );
     fill( 0 );
-    v.putTextFont( spiralFont, 12 );	  
+    v.putTextFont( waveFont, 12 );	  
 
     v.putText( funcString, x1Scr, y2Scr );
     setCoordsInView( x1Scr, y1Scr, x2Scr, y2Scr );

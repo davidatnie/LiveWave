@@ -32,7 +32,7 @@ class Student {
 
   void display( View v, int printPos ) {
     float whiteSpace = 10;
-    v.putTextFont( spiralFont, 15 );
+    v.putTextFont( waveFont, 15 );
     x1InView = whiteSpace;
     x2InView = x1InView + textWidth( studentID );
     y2InView = printPos * 15; // NOTE: assuming row height is 15 pixels per row
