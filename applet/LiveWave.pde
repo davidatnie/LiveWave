@@ -1,4 +1,4 @@
-// This is the main class for the Live visualizations - Wave and Spiral
+// This is the main class for the Live Wave visualizer
 
 // Fields
 
@@ -19,12 +19,17 @@ Divider[] dividers;
 
 void setup() {
   setupDisplayElements(); 
-  readParams();
-
+  readParams(); // comment to debug, uncomment before deploying
+  
+  // use these for deployment 
   aDetails[ 0 ] = "http://" + hostip + "/" + functioncall + "?aid=" + actid + "&ind=0";
   aDetails[ 1 ] = starttimeTrimmed;  
-  aDetails[ 2 ] = actid + " " + cnameandcyear + " " + school + " " + teacher;  
-
+  aDetails[ 2 ] = actid + " " + cnameandcyear + " " + school + " " + teacher; 
+ // use these for debugging
+ //aDetails[ 0 ] = "http://203.116.116.34:80/getAllContributionsAfter?aid=8&ind=0";
+ //aDetails[ 1 ] = "15:00:00";
+ //aDetails[ 2 ]  = "blah";
+  
   wva = new WaveActivity( this );
   wva.startWave( aDetails );
   

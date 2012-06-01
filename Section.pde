@@ -18,45 +18,6 @@ class Section {
 
   
   // Constructor
-/*
-  Section( int _activeDataset ) {
-    artefacts = new Table( datasets[ _activeDataset ] );
-    funcs = new ArrayList();
-    pdfName = artefacts.getString( 0, 1 ) + ".pdf";
-        
-    maxPostTime = getColumnMax( 0 );
-    minPostTime = getColumnMin( 0 );
-    exerciseStart = artefacts.getString( 0, 0 );
-    exerciseTitle = artefacts.getString( 0, 1 );
-    
-    for( int i = 1; i < artefacts.getRowCount(); i++ ) {
-     funcs.add( new Function( artefacts, i ) ); 
-    }
-    
-    // Checking for absence (or presence) of data
-    // For those classes which didn't conduct this particular activity or for which the GenSing recorder script was not run
-    // no data will be available to be visualized, although a dataset will still be created.
-    // The dataset will contain only one row of data, where the cells will contain the string "NO DATA"
-    if( funcs.size() == 1 ) // no data collected for this class
-      hasData = false;
-    else if( funcs.size() > 1 )
-      hasData = true;
-    else                           // this is just in case, should never happen, but if it does, the error message will be displayed
-      hasData = false;
-      text( "ERROR IN DATASET: DATASET CONTAINS 0 ROWS OF DATA!!!" );
-    
-    //spiral = new Spiral( funcs, maxPostTime, minPostTime, exerciseStart, exerciseTitle, artefacts, hasData );
-    
-    //deployment = new Deployment( funcs, artefacts );
-    
-    // stats will be built after the section's spiral and deployment are built, and after OpUsage has been built
-    
-  } // end constructor
-  */
-
-
-
-  // Overloaded Constructor for Database "Streaming"
 
   Section() {
     artefacts = null;         // NOT going to use artefacts in Database "Streaming"

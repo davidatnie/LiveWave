@@ -6,7 +6,10 @@ class Student {
   ArrayList <WavePt> wavePoints;
   int serialNum, dispOrder;
   float x1InView, y1InView, x2InView, y2InView;
-  boolean mouseOver;
+  boolean mouseOver
+
+
+;
 
 
 
@@ -49,7 +52,7 @@ class Student {
 
 
   void updateMouseOVer( View v ) {
-    if( mouseX >= x1InView + v.x1a - v.xScrollPos1 && mouseX <= x2InView + v.x1a - v.xScrollPos1 && mouseY >= y1InView + v.y1a - v.yScrollPos1 && mouseY <= y2InView + v.y1a - v.yScrollPos1 )
+    if( v.mouseWithin && mouseX >= x1InView + v.x1a - v.xScrollPos1 && mouseX <= x2InView + v.x1a - v.xScrollPos1 && mouseY >= y1InView + v.y1a - v.yScrollPos1 && mouseY <= y2InView + v.y1a - v.yScrollPos1 )
       mouseOver = true;
     else
       mouseOver = false;

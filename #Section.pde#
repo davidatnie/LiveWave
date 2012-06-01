@@ -4,14 +4,12 @@ class Section {
 
   // Fields
 
-  Spiral spiral;
   Table artefacts;
-  Deployment deployment;
-  Stats stats;
-  Scatter scatter;
+  
   int maxPostTime, minPostTime;
   String exerciseStart, exerciseTitle;
-  ArrayList <Function> funcs; // of type Function
+  Post_Time cExerciseStart, cMaxPostTime, cMinPostTime, cDuration;
+  ArrayList funcs; // of type Function
   int lastCountForFuncs;
   String pdfName;
   boolean hasData;  
@@ -20,109 +18,16 @@ class Section {
 
   
   // Constructor
-
-  Section( int _activeDataset ) {
-    artefacts = new Table( datasets[ _activeDataset ] );
-    funcs = new ArrayList();
-    pdfName = artefacts.getString( 0, 1 ) + ".pdf";
-        
-    maxPostTime = getColumnMax( 0 );
-    minPostTime = getColumnMin( 0 );
-    exerciseStart = artefacts.getString( 0, 0 );
-    exerciseTitle = artefacts.getString( 0, 1 );
-    
-    for( int i = 1; i < artefacts.getRowCount(); i++ ) {
-     funcs.add( new Function( artefacts, i ) ); 
-    }
-    
-    // Checking for absence (or presence) of data
-    // For those classes which didn't conduct this particular activity or for which the GenSing recorder script was not run
-    // no data will be available to be visualized, although a dataset will still be created.
-    // The dataset will contain only one row of data, where the cells will contain the string "NO DATA"
-    if( funcs.size() == 1 ) // no data collected for this class
-      hasData = false;
-    else if( funcs.size() > 1 )
-      hasData = true;
-    else                           // this is just in case, should never happen, but if it does, the error message will be displayed
-      hasData = false;
-      text( "ERROR IN DATASET: DATASET CONTAINS 0 ROWS OF DATA!!!" );
-    
-    spiral = new Spiral( funcs, maxPostTime, minPostTime, exerciseStart, exerciseTitle, artefacts, hasData );
-    
-    deployment = new Deployment( funcs, artefacts );
-    
-    // stats will be built after the section's spiral and deployment are built, and after OpUsage has been built
-    
-  } // end constructor
-  
-  
-
-
-  // Overloaded Constructor for Database "Streaming"
-
-  Section( String startTime, String title ) {
-    artefacts = null;         // NOT going to use artefacts in Database "Streaming"
-    funcs = new ArrayList();
-    lastCountForFuncs = 0;
-    pdfName =  title + ".pdf";
-    
-    maxPostTime = 0;
-    minPostTime = 0; // call updateMinMaxPostTime() later to fill these
-    exerciseStart = startTime;
-    exerciseTitle = title;
-    hasData = false;
-    
-    // This version of the constructor only creates a new instance, but will NOT populate it with data.
+ the constructor only creates a new instance, but will NOT populate it with data.
     // Population of data will come in via another method populateWStream()
-    // just build a blank spiral and deployment, to be populated later
     
-    spiral = new Spiral( exerciseStart, exerciseTitle, hasData );
-    deployment = new Deployment(); // this may not exist in live mode
-    
-    // stats will be built after the section's spiral and deployment are built, and after OpUsage has been built
-  } // end Overloaded constructor for Database "Streaming"
-
-
-
-
-  // Overloaded Constructor for Database "Streaming"
-
-  Section() {
-    artefacts = null;         // NOT going to use artefacts in Database "Streaming"
-    funcs = new ArrayList();
-    lastCountForFuncs = 0;
-    pdfName =  "";
-    
-    maxPostTime = 0;
-    minPostTime = 0; // call updateMinMaxPostTime() later to fill these
-    exerciseStart = "";
-    exerciseTitle = "";
-    hasData = false;
-    
-    // This version of the constructor only creates a new instance, but will NOT populate it with data.
-    // Population of data will come in via another method populateWStream()
-    // just build a blank spiral and deployment, to be populated later
-    
-    spiral = new Spiral();
-    deployment = new Deployment(); // this may not exist in live mode
-    
-    // stats will be built after the section's spiral and deployment are built, and after OpUsage has been built
+    // stats will be built after the section's spiral is built, and after OpUsage has been built
   } // end Overloaded constructor for Database "Streaming"
   
 
 
 
   // Methods 
-
-  void sproutSection( String tempStartTime, String tempTitle ) {
-    setStartTime( tempStartTime );
-    setTitle( tempTitle );  
-    pdfName = tempTitle + ".pdf";
-    spiral.sproutSpiral( tempStartTime, tempTitle, hasData );
-  } // end sproutSection()
-
-
-
 
   void setStartTime( String st ) {
     exerciseStart = st;
@@ -195,29 +100,6 @@ class Section {
   } // end getFuncsCount()
 
 
-  
-
-  void updateWNewDatastream() {  // consider removing - not called by anyone
-  // fetches new datastream and apply it to section and spiral
-    String theUrl = "http://203.116.116.34:80/";
-    Table tStream = fetchDatastream( theUrl );
-    populateFuncs( tStream );
-    applyToSpiral( tStream );
-  } // end updateNewDatastream()
-
-
-
-
-  void applyToSpiral( Table t ) {
-    print( "Applying Datastream To Spiral ... " );
-    spiral.addSpokes( funcs, lastCountForFuncs, minPostTime, maxPostTime, t );
-    spiral.updateHasData();
-    String tempExerciseStart = t.getString( 0, 0 );
-    spiral.updateTimings( tempExerciseStart, minPostTime, maxPostTime );
-    println( "Spiral spoke count is now " + spiral.spokes.size() + " [ DONE ]" );
-  }  // end applyToSpiral()
-
-
 
 
   Table fetchDatastream( String urlAddress ) {  // consider removing, not called by any one
@@ -239,7 +121,7 @@ class Section {
     //lastCountForFuncs = funcs.size();
     updateHasData();
     updateMinMaxPostTime();
-    println( "funcs count is now: " + funcs.size() + " [ DONE ]" );
+    println( "funcs count is now: " + funcs.size() + " maxPostTime is now: " + maxPostTime + " [ DONE ]" );
   } // end populateFuncs()
 
 
@@ -261,26 +143,9 @@ class Section {
       ret += ( f + "\n" );
     }
     ret += ( "-------------------------------------------" + "\n" );
-    ret += ( "spiral is: " );
-    if( spiral == null )
-      ret += ( "still NULL" + "\n" );
-    else
-      ret += ( "NOT null" + "\n" );
-
+    
     ret += ( "artefacts is: " );
     if( artefacts == null )
-      ret += ( "still NULL" + "\n" );
-    else
-      ret += ( "NOT null" + "\n" );
-
-    ret += ( "deployment is: " );
-    if( deployment == null )
-      ret += ( "still NULL" + "\n" );
-    else
-      ret += ( "NOT null" + "\n" );
-
-    ret += ( "scatter is: " );
-    if( scatter == null )
       ret += ( "still NULL" + "\n" );
     else
       ret += ( "NOT null" + "\n" );

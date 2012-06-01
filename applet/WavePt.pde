@@ -74,7 +74,6 @@ class WavePt extends Function {
     if( isSelected )
       drawSelected( v );
     if( mouseOver )
-      // drawLabel( wp.funcString, 20, r, "MOUSE" );
       drawMouseOver( v );
   } // end display()
 
@@ -102,7 +101,7 @@ class WavePt extends Function {
 
 
   void updateMouseOver( View v ) {
-    if ( mouseX >= x1InView + v.x1a - v.xScrollPos1 && mouseX <= x2InView + v.x1a - v.xScrollPos1 && mouseY >= y1InView + v.y1a - v.yScrollPos1 && mouseY <= y2InView + v.y1a - v.yScrollPos1)
+    if ( v.mouseWithin && mouseX >= x1InView + v.x1a - v.xScrollPos1 && mouseX <= x2InView + v.x1a - v.xScrollPos1 && mouseY >= y1InView + v.y1a - v.yScrollPos1 && mouseY <= y2InView + v.y1a - v.yScrollPos1)
       mouseOver = true;
     else
       mouseOver = false;

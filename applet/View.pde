@@ -21,6 +21,7 @@ class View {
   float step;  
   float xOffsetRender, yOffsetRender;
   boolean scrollableVer, scrollableHor;
+  boolean mouseWithin;  // true if mouse pointer is within the view area
 
 
 
@@ -93,7 +94,7 @@ class View {
     contentWidth = 0+borderE+borderW;
 
     bgColor = color( 255, 255, 255 ); // setting white as the default color
-
+    updateMouseWithin();
     updateOffsetRenders();
     
   } // end constructor  
@@ -377,8 +378,19 @@ class View {
 
 
 
+  
+  void updateMouseWithin() {
+    if( mouseX >= x1a && mouseX <= x2a && mouseY >= y1a && mouseY <= y2a )
+      mouseWithin = true;
+    else
+      mouseWithin = false;
+  } // end updateMouseWithin()
+
+
+
 
   void display() {
+    updateMouseWithin();
     stroke( 0 );
     noFill();
     rectMode( CORNERS );
