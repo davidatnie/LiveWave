@@ -101,8 +101,11 @@ class WavePt extends Function {
 
 
   void updateMouseOver( View v ) {
-    if ( v.mouseWithin && mouseX >= x1InView + v.x1a - v.xScrollPos1 && mouseX <= x2InView + v.x1a - v.xScrollPos1 && mouseY >= y1InView + v.y1a - v.yScrollPos1 && mouseY <= y2InView + v.y1a - v.yScrollPos1)
+    if ( v.mouseWithin && mouseX > x1InView + v.x1a - v.xScrollPos1 && mouseX < x2InView + v.x1a - v.xScrollPos1 && mouseY > y1InView + v.y1a - v.yScrollPos1 && mouseY < y2InView + v.y1a - v.yScrollPos1) {
       mouseOver = true;
+      fill( 0, 0,0, 128 );
+      rect( x1InView + v.x1a - v.xScrollPos1, y1InView + v.y1a - v.yScrollPos1,x2InView + v.x1a - v.xScrollPos1, y2InView + v.y1a - v.yScrollPos1);
+    }
     else
       mouseOver = false;
   }  // end updateMouseOver()
@@ -122,26 +125,34 @@ class WavePt extends Function {
   void drawMouseOver( View v ) {
     String s1 = funcString;
     String s2 = student.studentID + "    @ " + cPostTime;
-    String s = "";
-    if ( textWidth( s1 ) > textWidth( s2 ) )
-      s = s1;
-    else
-      s = s2;
+    String s3 = annotation;
+    v.putTextSize( 20 );
+    float[] textWidths = new float[ 3 ];
+    textWidths[ 0 ] = textWidth( s1 );
+    textWidths[ 1 ] = textWidth( s2 );
+    textWidths[ 2 ] = textWidth( s3 );
+    float maxText = max( textWidths );
     stroke( popUpTxt );
     fill( popUpBkgrd );
-    v.putTextSize( 20 );
     float whiteSpace = 5;
-    float rowCount = 2;
-    float lx1 = ( (mouseX - v.x1a) - (textWidth(s)/2) - whiteSpace ) +v.xScrollPos1;
-    float lx2 = lx1 + textWidth( s ) + 2*whiteSpace;
+    float rowCount = 3;
+    float lx1 = ( (mouseX - v.x1a) - (maxText/2) - whiteSpace ) +v.xScrollPos1;
+    float lx2 = lx1 + maxText + 2*whiteSpace;
     float ly1 = ((mouseY-v.y1a) - rowCount*v.viewTextSize) - 5 - whiteSpace + v.yScrollPos1;
-    float ly2 = ly1 + rowCount*v.viewTextSize + 2*whiteSpace;
+    float ly2 = ly1 + rowCount*v.viewTextSize + 3*whiteSpace;
 
     rectMode( CORNERS );
     v.putRect( lx1, ly1, lx2, ly2 );
     fill( popUpTxt );
     v.putText( funcString, lx1+whiteSpace, (ly1+v.viewTextSize) );
-    v.putText( student.studentID + "    @ " + cPostTime, lx1+whiteSpace, ly2-whiteSpace );
+    v.putTextSize( 10 );
+    v.putText( student.studentID + "    @ " + cPostTime, lx1+whiteSpace, ly1+4*v.viewTextSize );
+    v.putTextSize( 20 );
+    v.putText( annotation, lx1+whiteSpace, ly2-whiteSpace );
   } // end drawMouseOver()
+  
+  
+  
+  
 } // end class WavePt
 

@@ -6,6 +6,7 @@ class WaveActivity extends LVActivity {
   // Fields
   WaveUI wvaUI;
   Wave wave;
+  PopUpInput poInput;
 
 
 
@@ -81,6 +82,23 @@ class WaveActivity extends LVActivity {
     return wave;  
   } // end getWave()
   
+
+
+
+  void openPopUpInput() {
+    WavePt wpMO = wave.getWavePointMouseOver();
+    if( wpMO != null ) {
+      if( poInput != null )
+        poInput.dispose();
+        
+      String POInputTitle = "Annotate " + wpMO.funcString;
+      if( POInputTitle.length() > 40 ) {
+        POInputTitle = POInputTitle.substring( 0, 37 ) + "...";
+      }
+      poInput = new PopUpInput( this, wpMO, POInputTitle, "Type in text below:", wpMO.annotation );
+    }
+  }
+
   
   
   

@@ -31,6 +31,9 @@ class WaveUI extends AUI {
       processClickedWavePoint();
       // For Dropdowns
       processClickedDropdown();
+    } else if( mouseButton == RIGHT ) {
+      WaveActivity downcasted = ( WaveActivity ) owner;
+      downcasted.openPopUpInput();
     }
   } // end executeMousePressed()
 

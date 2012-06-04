@@ -333,5 +333,20 @@ class Wave extends Section {
 
 
 
+  WavePt getWavePointMouseOver() {
+  // returns WavePt object on top of which the mouse pointer is at
+  // returns null if no such WavePt exists
+    WavePt ret = null;
+    for( WavePt wp : wavePoints ) {
+      if( wp.mouseOver ) {
+        ret = wp;
+	break;
+      }
+    }
+    return ret;
+  } // end getWavePointMouseOver()
+
+
+
 
 } // end class Wave

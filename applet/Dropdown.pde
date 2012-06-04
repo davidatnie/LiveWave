@@ -19,7 +19,7 @@ class Dropdown {
   String[] ddItems;  // dropdown items
   String selItem;  // selected item
   String prevSelItem;  // previous selected Item
-  Button ddButton;  // dropdown button
+  AButton ddButton;  // dropdown button
   boolean expanded;  // true if displaying items to user for selection
 
 
@@ -60,7 +60,7 @@ class Dropdown {
       xlabel = width * 0.1;
       ylabel = ( linkIndex + 1 ) * rowHeight;
     }
-    ddButton = new Button( x1b, y1b, x2b, y2b, 0 );
+    ddButton = new AButton( x1b, y1b, x2b, y2b, 0 );
     bgColor = color( 255, 255, 255 );
     selColor = color( 200, 80, 80 );
     textColor = color( 0, 0, 0 );

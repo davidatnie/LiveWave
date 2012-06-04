@@ -1,7 +1,7 @@
 // Ancestor class of the GUI component.
 // see also: class View, class Divider, class Dropdown, class View
 
-class Button {
+class AButton {
 
   // Fields
 
@@ -19,7 +19,7 @@ class Button {
 
   // Constructor
 
-  Button( float x1p, float y1p, float x2p, float y2p, int linkIndexp ) {
+  AButton( float x1p, float y1p, float x2p, float y2p, int linkIndexp ) {
     x1 = x1p;
     y1 = y1p;
     x2 = x2p;
@@ -82,4 +82,4 @@ class Button {
 
 
 
-} // end Button class
+} // end AButton class

@@ -1,6 +1,6 @@
 // a class in the GUI component
 
-class SpButton extends Button {
+class SpButton  extends AButton {
 
   // Fields
 

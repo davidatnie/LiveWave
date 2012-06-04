@@ -8,7 +8,7 @@ abstract class AUI {
   // Fields
 
   Activity owner;
-  ArrayList <Button> arrButtons;
+  ArrayList <AButton> arrButtons;
   ArrayList <SpButton> arrSpButtons;
   ArrayList <Dropdown> arrDropdowns;
   View view;
@@ -79,7 +79,7 @@ float[] getViewCoords() {
 
   void createButton( float x1c, float y1c, float x2c, float y2c, int index ){
     // This will create one button and attach it into the arrButtons arraylist
-    arrButtons.add( new Button( x1c, y1c, x2c, y2c, index ) );
+    arrButtons.add( new AButton( x1c, y1c, x2c, y2c, index ) );
   } // end createButton
 
 
@@ -101,7 +101,7 @@ float[] getViewCoords() {
     int ret = -1;
     if( arrButtons != null ) {
       for( int i = 0; i < arrButtons.size(); i++ ) {
-        Button b = arrButtons.get( i );
+        AButton b = arrButtons.get( i );
         if( b.press() )
           ret = i;
       } // end for
@@ -116,7 +116,7 @@ float[] getViewCoords() {
   void releaseButtons() {
     int whichOne = getPressedArrButton();
     if( whichOne != -1 ) {
-      Button b = arrButtons.get( whichOne );  
+      AButton b = arrButtons.get( whichOne );  
       b.release();
     } // end if
   } // end releaseButtons()
@@ -304,7 +304,7 @@ float[] getViewCoords() {
   void update() {
     // For Buttons
     if( arrButtons != null )
-      for( Button b : arrButtons ) {
+      for( AButton b : arrButtons ) {
         b.update();
       }
       
@@ -327,7 +327,7 @@ float[] getViewCoords() {
     
     // For Buttons
     if( arrButtons != null )
-      for( Button b : arrButtons ) {
+      for( AButton b : arrButtons ) {
         b.display();
       }  
       

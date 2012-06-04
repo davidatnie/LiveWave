@@ -1,6 +1,6 @@
 // class in the GUI component
 
-class ScrollPosButton extends Button {
+class ScrollPosButton  extends AButton {
 
   // Fields
   View owner;

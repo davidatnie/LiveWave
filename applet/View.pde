@@ -16,7 +16,7 @@ class View {
   PImage img;
   float contentHeight, contentWidth;
   color bgColor;
-  Button sbUp, sbDown, sbLeft, sbRight; // the four scrollbar buttons
+  AButton sbUp, sbDown, sbLeft, sbRight; // the four scrollbar buttons
   ScrollPosButton sbVer, sbHor;         // the two draggable scrollbars
   float step;  
   float xOffsetRender, yOffsetRender;
@@ -77,10 +77,10 @@ class View {
     xScrollPos2 = xScrollPos1 + ( x2a - x1a );
     yScrollPos2 = yScrollPos1 + ( y2a - y1a );
     
-    sbUp    = new Button(       x2a,       y1,      x2, y1 + 20, 0 );
-    sbDown  = new Button(       x2a, y2a - 20,      x2,     y2a, 1 );
-    sbLeft  = new Button(       x1,       y2a, x1 + 20,      y2, 2 );
-    sbRight = new Button( x2a - 20,       y2a,     x2a,      y2, 3 );
+    sbUp    = new AButton(       x2a,       y1,      x2, y1 + 20, 0 );
+    sbDown  = new AButton(       x2a, y2a - 20,      x2,     y2a, 1 );
+    sbLeft  = new AButton(       x1,       y2a, x1 + 20,      y2, 2 );
+    sbRight = new AButton( x2a - 20,       y2a,     x2a,      y2, 3 );
     
     sbVer = new ScrollPosButton( this, x2a, y1a + 20, x2, y2a - 20, 4, "VERTICAL" );
     sbHor = new ScrollPosButton( this, x1a + 20, y2a, x2a - 20, y2, 5, "HORIZONTAL");
