@@ -1,0 +1,77 @@
+import java.awt.event.*;
+import java.awt.TextArea;
+import java.awt.Label;
+import java.awt.Button;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Panel;
+//import javax.*;
+
+class PopUpInput extends Frame{
+  // Fields
+  Bablah owner;
+  BorderLayout layout;
+  TextArea input;
+  Label caption;
+  Button okB, cancelB, clearB;
+  Panel buttonPanel;
+
+  //Methods
+
+  PopUpInput( Bablah o, String title, String cap, float x1, float y1, float x2, float y2 ) {
+    super( title );
+    owner = o;
+    layout = new BorderLayout( 10, 10 );
+    setLayout( layout );
+    buttonPanel = new Panel();
+    buttonPanel.setLayout( new GridLayout( 1, 3, 80, 20 ) );
+    float popUpWidth = x2 - x1;
+    float popUpHeight = y2 - y1;
+    popUpWidth = constrain( popUpWidth, 200, width );
+    popUpHeight = constrain( popUpHeight, 150, height );
+    setSize( int( popUpWidth ), int( popUpHeight ) );
+    setVisible( true );
+    
+    caption = new Label( cap );
+    add( caption, BorderLayout.NORTH );
+    
+    input = new TextArea( "", 30, 5, 1 );
+    add( input, BorderLayout.CENTER );
+    
+    clearB = new Button( "CLEAR" );
+    buttonPanel.add( clearB );
+    
+    cancelB = new Button( "CANCEL" );
+    buttonPanel.add( cancelB );
+    
+    okB = new Button( "OK" );
+    buttonPanel.add( okB );
+    
+    add( buttonPanel, BorderLayout.SOUTH );
+    
+    
+    clearB.addActionListener( new ActionListener() {
+      public void actionPerformed( ActionEvent e ) {
+        input.setText( "" );
+      }
+    }
+    );
+    
+    cancelB.addActionListener( new ActionListener() {
+      public void actionPerformed( ActionEvent e ) {
+        setVisible( false );
+      }
+    }
+    );
+    
+    okB.addActionListener( new ActionListener() {
+      public void actionPerformed( ActionEvent e ) {
+        fill( 0 );
+        owner.text( input.getText(), 0, height/2 );
+        println( input.getText() );
+      } // end actionPerformed()
+    } // end inner class
+    ); // end input.addActionListener()
+  } // end constructor
+
+} // end class PopUpInput
