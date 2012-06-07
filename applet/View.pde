@@ -69,7 +69,7 @@ class View {
     viewHeight = y2a - y1a;
     borderN = 0;
     borderS = 0;
-    borderE = 50;	
+    borderE = 0;	
     borderW = 0;
     
     xScrollPos1 = 0;

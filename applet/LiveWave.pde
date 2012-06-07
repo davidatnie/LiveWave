@@ -30,7 +30,7 @@ void setup() {
   //use these for debugging
   aDetails[ 0 ] = "http://203.116.116.34:80/getAllContributionsAfter?aid=8&ind=0";
   aDetails[ 1 ] = "15:00:00";
-  aDetails[ 2 ]  = "blah";
+  aDetails[ 2 ]  = "Testing";
   */
   wva = new WaveActivity( this );
   wva.startWave( aDetails );

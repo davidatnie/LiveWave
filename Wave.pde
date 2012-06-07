@@ -12,8 +12,8 @@ class Wave extends Section {
   //int maxPostTime, minPostTime;
   String title;
   
-  float x, y, xRibbon, yRibbon;
-  float maxRad, maxRibbonLength, ribbonDepthOffset, oneMinLength, viewPrintOffset;
+  float x, y;
+  float maxRad;
 
   int maxLevel, stepUpWindow, stepDownWindow, resetWindow;
   float rgbPropRate, rgbSmoothRate;
@@ -32,15 +32,6 @@ class Wave extends Section {
     x = 150;
     y = 400;
     maxRad = 125;
-
-    // variables for the Ribbon, should just make this into an object instead
-   
-    oneMinLength = 60;
-    maxRibbonLength = 10 * oneMinLength;
-    ribbonDepthOffset = 50;
-      viewPrintOffset = 100;
-      xRibbon = 300 + ribbonDepthOffset + viewPrintOffset;
-      yRibbon = 150;
 
     // properties of the Intensity and Wave coloring
     maxLevel = 20;
@@ -82,6 +73,7 @@ class Wave extends Section {
     int wpCountAfter = wavePoints.size(); 
     updateHasData();
     processWavePoints( wpCountBefore, wpCountAfter );
+    ribbon.updateMinsCount();
     println( "finished going trhough growWave()" );
   } // end growWave()
 

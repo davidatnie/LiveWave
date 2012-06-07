@@ -14,6 +14,7 @@ class WaveActivity extends LVActivity {
   // Constructor
   WaveActivity( LiveWave o ) {
     super( o );
+    //bgColor = color( 250, 250, 250 );
     bgColor = color( 0, 0, 0 );
     wvaUI = new WaveUI( this );
     aUI = wvaUI;
@@ -50,6 +51,7 @@ class WaveActivity extends LVActivity {
     View renderer = aUI.view;
     renderer.updateOffsetRenders();
     wave.display( renderer );
+    wave.ribbon.drawThreadInView( renderer );
   } // end render()
 
 

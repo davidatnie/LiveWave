@@ -55,24 +55,24 @@ class WavePt extends Function {
 
 
   void display( View v, float printPos ) {
-    float x1Scr = owner.viewPrintOffset + postTime - textWidth( funcString ) - 4;
-    float x2Scr = owner.viewPrintOffset + postTime;
+    fill( 0 );
+    v.putTextFont( waveFont, 12 );
+    float x2Scr = map( postTime, 0, owner.ribbon.maxMins*60, owner.ribbon.x, owner.ribbon.x+owner.ribbon.maxMins*owner.ribbon.oneMinLength ) - owner.ribbon.x + owner.ribbon.viewPrintOffset;
+    float x1Scr = x2Scr - textWidth( funcString ) - 4;
     float y2Scr = printPos * 15;
     float y1Scr = y2Scr - v.viewTextSize;
-    stroke( 1255, 90, 50 ); // orangey color for Live mode, can't assess for Hit/No-Hit
+    stroke( 255, 90, 50 ); // orangey color for Live mode, can't assess for Hit/No-Hit
     strokeWeight( 3 );
 
     v.putLine( x2Scr, y1Scr, x2Scr, y2Scr );
 
     strokeWeight( 1 );
-    fill( 0 );
-    v.putTextFont( waveFont, 12 );	  
-
+    
     v.putText( funcString, x1Scr, y2Scr );
     setCoordsInView( x1Scr, y1Scr, x2Scr, y2Scr );
     updateMouseOver( v );
     if( isSelected )
-      drawSelected( v );
+      drawSelected( v, funcString );
     if( mouseOver )
       drawMouseOver( v );
   } // end display()
@@ -103,8 +103,8 @@ class WavePt extends Function {
   void updateMouseOver( View v ) {
     if ( v.mouseWithin && mouseX > x1InView + v.x1a - v.xScrollPos1 && mouseX < x2InView + v.x1a - v.xScrollPos1 && mouseY > y1InView + v.y1a - v.yScrollPos1 && mouseY < y2InView + v.y1a - v.yScrollPos1) {
       mouseOver = true;
-      fill( 0, 0,0, 128 );
-      rect( x1InView + v.x1a - v.xScrollPos1, y1InView + v.y1a - v.yScrollPos1,x2InView + v.x1a - v.xScrollPos1, y2InView + v.y1a - v.yScrollPos1);
+      //fill( 0, 0,0, 128 );
+      //rect( x1InView + v.x1a - v.xScrollPos1, y1InView + v.y1a - v.yScrollPos1,x2InView + v.x1a - v.xScrollPos1, y2InView + v.y1a - v.yScrollPos1);
     }
     else
       mouseOver = false;
@@ -113,10 +113,16 @@ class WavePt extends Function {
 
 
 
-  void drawSelected( View v ) { 
-    stroke( 255, 0, 0 );
-    noFill();
-    v.putRect( x1InView, y1InView, x2InView, y2InView );
+  void drawSelected( View v, String s ) {
+    int depth = 120;
+    float stepWidth = textWidth( s ) / 12;
+    // put gradually changing transparent color on the background of the equation  
+    for( int i = 0; i <= 10; i++ ) { // there are 10 steps
+      fill( 255, 90, 50, depth ); // orangey
+      stroke( 255, 90, 50, depth );
+      v.putRect( x2InView-4-( i*stepWidth ), y1InView, x2InView-4-( (i+1)*stepWidth )+1, y2InView );
+      depth = depth - 12;
+    }      
   } // end drawSelected()
 
 
@@ -141,11 +147,30 @@ class WavePt extends Function {
     float ly1 = ((mouseY-v.y1a) - rowCount*v.viewTextSize) - 5 - whiteSpace + v.yScrollPos1;
     float ly2 = ly1 + rowCount*v.viewTextSize + 3*whiteSpace;
 
+    // make sure mouseOver box will be displayd inside the View
+    if( lx1 < v.xScrollPos1 ) {
+      float lWidth = lx2 - lx1;
+      lx1 = v.xScrollPos1 + 20;
+      lx2 = lx1 + lWidth; 
+    } else if( lx2 > v.xScrollPos2 ) {
+      float lWidth = lx2 - lx1;
+      lx2 = v.xScrollPos2 - 20;
+      lx1 = lx2 - lWidth;
+    } else if( ly1 < v.yScrollPos1 ) {
+      float lHeight = ly2 - ly1;
+      ly1 = v.yScrollPos1 + 20;
+      ly2 = ly1 + lHeight;
+    } else if( ly2 > v.yScrollPos2 ) {
+      float lHeight = ly2 - ly1;
+      ly2 = v.yScrollPos2 - 20;
+      ly1 = ly2 - lHeight;
+    }
+
     rectMode( CORNERS );
     v.putRect( lx1, ly1, lx2, ly2 );
     fill( popUpTxt );
     v.putText( funcString, lx1+whiteSpace, (ly1+v.viewTextSize) );
-    v.putTextSize( 10 );
+    v.putTextSize( 12 );
     v.putText( student.studentID + "    @ " + cPostTime, lx1+whiteSpace, ly1+4*v.viewTextSize );
     v.putTextSize( 20 );
     v.putText( annotation, lx1+whiteSpace, ly2-whiteSpace );

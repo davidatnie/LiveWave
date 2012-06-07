@@ -73,7 +73,26 @@ class Student {
     float lx1 = ( (mouseX-v.x1a) - (tWidth*0) - whiteSpace) + v.xScrollPos1;
     float ly1 = ((mouseY-v.y1a) - (4*v.viewTextSize) - whiteSpace - 5 ) + v.yScrollPos1;	  float lx2 = lx1 + tWidth + (2*whiteSpace);
     float ly2 = ly1 + (4*v.viewTextSize) + (2*whiteSpace);
-
+    
+    // make sure mouseOver box will be displayd inside the View
+    if( lx1 < v.xScrollPos1 ) {
+      float lWidth = lx2 - lx1;
+      lx1 = v.xScrollPos1 + 20;
+      lx2 = lx1 + lWidth; 
+    } else if( lx2 > v.xScrollPos2 ) {
+      float lWidth = lx2 - lx1;
+      lx2 = v.xScrollPos2 - 20;
+      lx1 = lx2 - lWidth;
+    } else if( ly1 < v.yScrollPos1 ) {
+      float lHeight = ly2 - ly1;
+      ly1 = v.yScrollPos1 + 20;
+      ly2 = ly1 + lHeight;
+    } else if( ly2 > v.yScrollPos2 ) {
+      float lHeight = ly2 - ly1;
+      ly2 = v.yScrollPos2 - 20;
+      ly1 = ly2 - lHeight;
+    }
+    
     rectMode( CORNERS );
     stroke( popUpTxt );
     v.putRect( lx1, ly1, lx2, ly2 );
