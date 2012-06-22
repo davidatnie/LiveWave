@@ -22,7 +22,7 @@ class PopUpInput extends Frame{
 
 
 
-  //Methods
+  //Constructor
 
   PopUpInput( LVActivity o, WavePt ref, String t, String c, String cont ) {
     super( t );

@@ -1,6 +1,7 @@
 class WaveUI extends AUI {
 
   // Fields
+  PopUpCodeChooser pucc;
 
 
 
@@ -17,7 +18,7 @@ class WaveUI extends AUI {
      d.buildDDItems( bleh );
      */
       
-    createSpButton( o.x1Frame + 50, o.y1Frame + 50, o.x1Frame + 150, o.y1Frame + 100, getNextIndexArrSpButtons(), "Choose Code(s)", popUpTxt, popUpBkgrd, butOv, butPress );
+    createSpButton( o.x2Frame - 120, o.y1Frame + 50, o.x2Frame - 20, o.y1Frame + 90, getNextIndexArrSpButtons(), "Choose Code(s)", color( 0, 0, 0 ), color( 180, 180, 180 ), color( 250, 250, 250 ), butPress );
 
     owner = o;
   } // end constructor
@@ -36,7 +37,9 @@ class WaveUI extends AUI {
       
       int whichOne = getPressedArrSpButton();
       if( whichOne == 0 ) { // "Choose Code(s)"
-        PopUpCodeChooser pc = new PopUpCodeChooser( downcasted, currentWave.codeCabinet, currentWave.selCodes );
+        if( pucc!= null) 
+          pucc.dispose();
+        pucc= new PopUpCodeChooser( downcasted, currentWave.codeCabinet, currentWave.selCodes );
       }
            
       processClickedView();

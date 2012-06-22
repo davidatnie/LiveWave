@@ -26,42 +26,52 @@ class PopUpCodeChooser extends Frame{
 
 
   // Constructor
+
   PopUpCodeChooser( LVActivity o, CodeCabinet cc, ArrayList<String> prevSelection ) {
     super( "Select Codes To Display" );
-    setSize( 500, 500 );
-    setLocation( mouseX - 500, mouseY );
+    setSize( 450, 450 );
+    setLocation( mouseX - 450, mouseY );
     setBackground( new Color( 255, 255, 255 ) );
     setVisible( true );
     setLayout( null );
     owner = o;
     codeCabinet = cc;
     selCodes = prevSelection;
+    setBackground( new Color( 0, 0, 0 ) );
     
     // make static elements
 
     selAllGB = new Button( "Select ALL Codes, All Categories" );
-    selAllGB.setBounds( 250, 30, 230, 25 );
+    selAllGB.setBounds( 200, 30, 230, 25 );
+    selAllGB.setBackground( new Color( 180, 180, 180 ) );
 
     deselAllGB = new Button( "De-select ALL Codes, All Categories" );
-    deselAllGB.setBounds( 250, 50, 230, 25 );
+    deselAllGB.setBounds( 200, 60, 230, 25 );
+    deselAllGB.setBackground( new Color( 180, 180, 180 ) );
    
     label1 = new Label( "SELECT GLOBALLY:" );
-    label1.setBounds( 20, 30, 130, 20 );
+    label1.setBounds( 40, 30, 130, 20 );
+    label1.setForeground( new Color( 255, 255, 0 ) );
 
     label2 = new Label( "SELECT BY CATEGORY:" );
-    label2.setBounds( 20, 100, 140, 20 );
+    label2.setBounds( 40, 120, 130, 20 );
+    label2.setForeground( new Color( 255, 255, 0 ) );
 
     okB = new Button( "OK" );
-    okB.setBounds( 300, 450, 100, 30 );
+    okB.setBounds( 330, 400, 100, 30 );
+    okB.setBackground( new Color( 180, 180, 180 ) );
 
     cancelB = new Button( "CANCEL" );
-    cancelB.setBounds( 100, 450, 100, 30 );
+    cancelB.setBounds( 200, 400, 100, 30 );
+    cancelB.setBackground( new Color( 180, 180, 180 ) );
 
     nextB = new Button( "NEXT" );
-    nextB.setBounds( 400, 450, 100, 40 );
+    nextB.setBounds( 330, 300, 100, 40 );
+    nextB.setBackground( new Color( 180, 180, 180 ) );
 
     prevB = new Button( "PREVIOUS" );
-    prevB.setBounds( 400, 400, 100, 40 );
+    prevB.setBounds( 330, 250, 100, 40 );
+    prevB.setBackground( new Color( 180, 180, 180 ) );
 
     categoryChooser = new Choice();
     Set<String> ks = codeCabinet.codeCategoriesDictionary.keySet();
@@ -76,15 +86,18 @@ class PopUpCodeChooser extends Frame{
     
     for( String ck : catKeys )
       categoryChooser.addItem( ck );
-    categoryChooser.setBounds( 170, 100, 230, 25 );
+    categoryChooser.setBounds( 200, 120, 230, 25 );
+    categoryChooser.setBackground( new Color( 255, 220, 200 ) );
     categoryChooser.select( catKeys[ 0 ] );
     processChosenCat( catKeys[ 0 ] );
     
     selAllCB = new Button( "Select All Codes In This Category" );
-    selAllCB.setBounds( 280, 125, 200, 25 );
+    selAllCB.setBounds( 230, 150, 200, 25 );
+    selAllCB.setBackground( new Color( 180, 180, 180 ) );
     
     deselAllCB = new Button( "De-select All Codes In This Category" ); 
-    deselAllCB.setBounds( 280, 150, 200, 25 );
+    deselAllCB.setBounds( 230, 180, 200, 25 );
+    deselAllCB.setBackground( new Color( 180, 180, 180 ) );
 
     add( okB );
     add( cancelB );
@@ -110,6 +123,9 @@ class PopUpCodeChooser extends Frame{
         for( Checkbox cb : displayedCBs ) {
           cb.setState( true );
         }
+        for( Checkbox cb : chosenCatCBs ) {
+          cb.setState( true ); 
+        }
       }
     } );
 
@@ -117,6 +133,8 @@ class PopUpCodeChooser extends Frame{
       public void actionPerformed( ActionEvent e ) {
         selCodes = new ArrayList<String>(); // empty ArrayList
         for( Checkbox cb : displayedCBs )
+          cb.setState( false );
+        for( Checkbox cb : chosenCatCBs )
           cb.setState( false );
       }
     } );
@@ -205,6 +223,10 @@ class PopUpCodeChooser extends Frame{
           prevB.setVisible( false );  // no more PREVIOUS
         else
           prevB.setVisible( true );
+        if( shownIndex < chosenCatCBs.size() - 10 )
+          nextB.setVisible( true );
+        else
+          nextB.setVisible( false );
       }    
     } );
 
@@ -221,8 +243,46 @@ class PopUpCodeChooser extends Frame{
           nextB.setVisible( false ); // no more NEXT
         else
           nextB.setVisible( true );
+        if( shownIndex >= 10 )
+          prevB.setVisible( true );
+        else
+          prevB.setVisible( false );
       }
     } );
+
+    addWindowListener( new WindowListener() {
+    // NOTE: the following windowListener methods must be ALL be implemented
+    // or it simply won't run
+    //
+      public void windowClosing( WindowEvent e ) {
+        dispose();  
+      }
+      
+      public void windowIconified( WindowEvent e ) {
+        dispose(); 
+      }
+      
+      public void windowActivated( WindowEvent e ) {
+         
+      }
+      
+      public void windowDeiconified( WindowEvent e ) {
+        setSize( 500, 200 );
+      }
+      
+      public void windowClosed( WindowEvent e ) {
+        
+      }
+      
+      public void windowDeactivated( WindowEvent e ) {
+        
+      }
+      
+      public void windowOpened( WindowEvent e ) {
+        
+      }
+    }
+    );
 
   } // end constructor
   
@@ -250,10 +310,24 @@ class PopUpCodeChooser extends Frame{
     displayedCBs = setDisplayedCBs( chosenCatCBs, shownIndex, 10 );
     addDisplayedCBsListeners();
     paintDisplayedCBs();
-    if( shownIndex > chosenCatCBs.size()-10 );
-      nextB.setVisible( false ); // no more NEXT
-    if( shownIndex < 10 )
-      prevB.setVisible( false ); // no more PREVIOUS
+
+    if( chosenCatCBs.size() > 10 ) {
+      if( shownIndex > chosenCatCBs.size()-10 )
+        nextB.setVisible( false ); // no more NEXT
+      else
+        nextB.setVisible( true );
+    } else {
+      nextB.setVisible( false );
+    }
+    
+    if( chosenCatCBs.size() > 10 ) {
+      if( shownIndex < 10 )
+        prevB.setVisible( false ); // no more PREVIOUS
+      else
+        prevB.setVisible( true );
+    } else {
+      prevB.setVisible( false ); 
+    }
   } // end processChosenCat()
 
 
@@ -273,16 +347,17 @@ class PopUpCodeChooser extends Frame{
     int endPos = indexStart + numberToDisp;
     if( inputCBs.size() < endPos )
       endPos = inputCBs.size(); 
-    int x1Reg = 25;
-    int y1Reg = 130;
+    int x1Reg = 50;
+    int y1Reg = 150;
     //int x2Reg = 255;
     //int y2Reg - 300;
-    int cbWidth = 150;
+    int cbWidth = 120;
     int cbHeight = 20;
 
     println( "Showing the following Checkboxes :" );
     for( int i = startPos; i < endPos; i++ ) {
-      inputCBs.get( i ).setBounds( x1Reg, (i*cbHeight)+y1Reg, cbWidth, cbHeight );
+      inputCBs.get( i ).setBounds( x1Reg, ( (i%10) * cbHeight )+y1Reg + ((i%10)*5), cbWidth, cbHeight );
+      inputCBs.get( i ).setBackground( new Color( 255, 220, 200 ) );
       println( "\t" + inputCBs.get( i ).getLabel() );
       inputCBs.get( i ).setVisible( true );
       ret.add( inputCBs.get( i ) );

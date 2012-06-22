@@ -20,6 +20,7 @@ class Wave extends Section {
 
   CodeCabinet codeCabinet;
   ArrayList<String> selCodes;
+  String selCodesDisp, selCodesDispPrev;
 
 
 
@@ -72,6 +73,8 @@ class Wave extends Section {
       CodeCategory ccg = codeCabinet.codeCategoriesDictionary.get( "Math" );
       for( CodeItem ci : ccg.codeItems )
         println( ccg.dispName + "-=" + ci.dispName );
+        
+    selCodesDisp = setSelCodesDisp( selCodes );
   } // end sproutWave()
 
 
@@ -294,6 +297,7 @@ class Wave extends Section {
         */
       } // end for wavePoints
       ribbon.display( r );
+      printSelCodesDisp();
     }
   } // end drawWave()
 
@@ -367,5 +371,21 @@ class Wave extends Section {
 
 
 
+
+  String setSelCodesDisp( ArrayList<String> input ) {
+    String ret = "";
+    for( String s : input )
+      ret += s + "   ";
+    return ret;
+  } // end setSelCodesDisp()
+
+
+
+
+  void printSelCodesDisp() {
+    fill( popUpTxt );
+    textSize( 12 );
+    text( "Showing :      " + setSelCodesDisp( selCodes ), 300, 80  );
+  } // end printSelCodesDisp()
 
 } // end class Wave
