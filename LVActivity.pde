@@ -222,6 +222,60 @@ class LVActivity extends Activity {
         } // end else "DESCRIPTOR:"
       } // end for i
     } // end if got valid data
+    // below are just a block of dummy data for testing
+    CodeCategory catMath = codeCabinet.codeCategoriesDictionary.get( "Math" );
+    CodeItem c1, c2, c3, c4, c5, c6, c7, c8, c9, c10;
+    c1 = new CodeItem( "M1" );
+    c2 = new CodeItem( "M2" );
+    c3 = new CodeItem( "M3" );
+    c4 = new CodeItem( "M4" );
+    c5 = new CodeItem( "M5" );
+    c6 = new CodeItem( "M6" );
+    c7 = new CodeItem( "M7" );
+    c8 = new CodeItem( "M8" );
+    c9 = new CodeItem( "M9" );
+    c10 = new CodeItem("M10" );
+    codeCabinet.codeItemsList.add( c1 );
+    codeCabinet.codeItemsList.add( c2 );
+    codeCabinet.codeItemsList.add( c3 );
+    codeCabinet.codeItemsList.add( c4 );
+    codeCabinet.codeItemsList.add( c5 );
+    codeCabinet.codeItemsList.add( c6 );
+    codeCabinet.codeItemsList.add( c7 );
+    codeCabinet.codeItemsList.add( c8 );
+    codeCabinet.codeItemsList.add( c9 );
+    codeCabinet.codeItemsList.add( c10 );
+    codeCabinet.codeItemsDictionary.put( c1.dispName, c1 );
+    codeCabinet.codeItemsDictionary.put( c2.dispName, c2 );
+    codeCabinet.codeItemsDictionary.put( c3.dispName, c3 );
+    codeCabinet.codeItemsDictionary.put( c4.dispName, c4 );
+    codeCabinet.codeItemsDictionary.put( c5.dispName, c5 );
+    codeCabinet.codeItemsDictionary.put( c6.dispName, c6 );
+    codeCabinet.codeItemsDictionary.put( c7.dispName, c7 );
+    codeCabinet.codeItemsDictionary.put( c8.dispName, c8 );
+    codeCabinet.codeItemsDictionary.put( c9.dispName, c9 );
+    codeCabinet.codeItemsDictionary.put( c10.dispName, c10 );
+    catMath.addCodeItem( c1 );
+    catMath.addCodeItem( c2 );
+    catMath.addCodeItem( c3 );
+    catMath.addCodeItem( c4 );
+    catMath.addCodeItem( c5 );
+    catMath.addCodeItem( c6 );
+    catMath.addCodeItem( c7 );
+    catMath.addCodeItem( c8 );
+    catMath.addCodeItem( c9 );
+    catMath.addCodeItem( c10 );
+    codeCabinet.codeBook.put( c1, catMath );
+    codeCabinet.codeBook.put( c2, catMath );
+    codeCabinet.codeBook.put( c3, catMath );
+    codeCabinet.codeBook.put( c4, catMath );
+    codeCabinet.codeBook.put( c5, catMath );
+    codeCabinet.codeBook.put( c6, catMath );
+    codeCabinet.codeBook.put( c7, catMath );
+    codeCabinet.codeBook.put( c8, catMath );
+    codeCabinet.codeBook.put( c9, catMath );
+    codeCabinet.codeBook.put( c10, catMath );
+  
   } // end buildCodeCabinet()
 
 

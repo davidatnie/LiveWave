@@ -26,9 +26,9 @@ class WavePt extends Function {
     owner = o;
     readCodes( t, row, 7 );
     readAnnotation( t, row, 8 );
-    println( " studentID " + studentID );
+    //println( " studentID " + studentID );
     student = owner.getStudent( studentID );
-    println( "student with ID " + studentID + " added : " + ( student != null ) );
+    //println( "student with ID " + studentID + " added : " + ( student != null ) );
     isSelected = false;
     mouseOver = false;
     //annotation = "";
@@ -42,16 +42,16 @@ class WavePt extends Function {
   // Methods
 
   void readCodes( Table t, int r, int c ) {
-    println( "reading code : " );
+    //println( "reading code : " );
     codes = new ArrayList <CodeItem>();
-    println( "RAW: " + t.getString( r, c ) );
+    //println( "RAW: " + t.getString( r, c ) );
     String[] pieces = splitTokens( t.getString( r, c ), "|" );
-    println( "PIECES : " );
-    println( pieces );
+    //println( "PIECES : " );
+    //println( pieces );
     if( pieces.length > 0 ) 
       for( String p : pieces ){
         CodeItem ci = owner.codeCabinet.codeItemsDictionary.get( p );
-        println( "\tadding " + p );
+        //println( "\tadding " + p );
         codes.add( ci ); 
       } 
   } // end readCodes()
@@ -67,7 +67,6 @@ class WavePt extends Function {
         if( pieces.length > 1 )
           for( int i = 1; i < pieces.length; i++ ) {
             annotation += ( "\n" + pieces[ i ] );
-            println( annotation );
           }
   } // end readAnnotation()
 
@@ -93,26 +92,28 @@ class WavePt extends Function {
 
 
   void display( View v, float printPos ) {
-    fill( 0 );
-    v.putTextFont( waveFont, 12 );
-    float x2Scr = map( postTime, 0, owner.ribbon.maxMins*60, owner.ribbon.x, owner.ribbon.x+owner.ribbon.maxMins*owner.ribbon.oneMinLength ) - owner.ribbon.x + owner.ribbon.viewPrintOffset;
-    float x1Scr = x2Scr - textWidth( funcString ) - 4;
-    float y2Scr = printPos * 15;
-    float y1Scr = y2Scr - v.viewTextSize;
-    stroke( 255, 90, 50 ); // orangey color for Live mode, can't assess for Hit/No-Hit
-    strokeWeight( 3 );
+    if( dispOrder != -1 ) {
+      fill( 0 );
+      v.putTextFont( waveFont, 12 );
+      float x2Scr = map( postTime, 0, owner.ribbon.maxMins*60, owner.ribbon.x, owner.ribbon.x+owner.ribbon.maxMins*owner.ribbon.oneMinLength ) - owner.ribbon.x + owner.ribbon.viewPrintOffset;
+      float x1Scr = x2Scr - textWidth( funcString ) - 4;
+      float y2Scr = printPos * 15;
+      float y1Scr = y2Scr - v.viewTextSize;
+      stroke( 255, 90, 50 ); // orangey color for Live mode, can't assess for Hit/No-Hit
+      strokeWeight( 3 );
 
-    v.putLine( x2Scr, y1Scr, x2Scr, y2Scr );
+      v.putLine( x2Scr, y1Scr, x2Scr, y2Scr );
 
-    strokeWeight( 1 );
+      strokeWeight( 1 );
     
-    v.putText( funcString, x1Scr, y2Scr );
-    setCoordsInView( x1Scr, y1Scr, x2Scr, y2Scr );
-    updateMouseOver( v );
-    if( isSelected )
-      drawSelected( v, funcString );
-    if( mouseOver )
-      drawMouseOver( v );
+      v.putText( funcString, x1Scr, y2Scr );
+      setCoordsInView( x1Scr, y1Scr, x2Scr, y2Scr );
+      updateMouseOver( v );
+      if( isSelected )
+        drawSelected( v, funcString );
+      if( mouseOver )
+        drawMouseOver( v );
+    }
   } // end display()
 
 
@@ -219,8 +220,30 @@ class WavePt extends Function {
     v.putText( annotation, lx1+whiteSpace, ly2-whiteSpace );
   } // end drawMouseOver()
   
+
   
-  
+
+  boolean hasSelCodes( ArrayList<String> input ) {
+    boolean ret = false;
+    if( codes.isEmpty() ) {
+      return ret;
+    } else {
+      for( CodeItem ci : codes ) {
+        if( input.contains( ci.dispName ) )
+          ret = true;
+      }
+      return ret;
+    }
+  } // end hasSelCodes()
+
+
+
+  boolean hasNoCodes() {
+    if( codes.isEmpty() )
+      return true;
+    else
+      return false;
+  } // end hasNoCodes()
   
 } // end class WavePt
 
