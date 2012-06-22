@@ -12,14 +12,14 @@ class Function {
   int serialNum;
   int postTime;
   Post_Time cPostTime;
-  String studentID, yOrder, funcString, math1, math2, math3, social1, social2, social3;
+  String studentID, yOrder, funcString;
   boolean hit; // 1 is "HIT", 0 is "NO-HIT" OR "UNASSESSED"
   String hitTxt; // raw value of the HIT/NO-HIT cell: "HIT" / "NO-HIT" / "UNASSESSED"
   //boolean tagged; // 1 is tagged, 0 is not tagged
   
 
 
-  
+  /* NO LONGER APPLICABLE - LIVE WAVE IS BREAKING AWAY FROM USING FLAT FILES
   // Constructor - a Function object is constructed by passing the row number from the dataset file as the argument
   
   Function( Table _artefacts, int row ) {
@@ -39,30 +39,28 @@ class Function {
     hitTxt = _artefacts.getString( row, 10 );
     // <NOT IMPLEMENTED YET> tagged = loadStatus( row, 13 );
   } // end constructor Functions 
-
+  */
 
 
 
   // Overloaded Constructor for live Database "Streaming"
-  // Since datastream from database is not as complete as datasets,
-  // Math & Social strategies, Hit/No-Hit are defaulted in initialization
+
+  Function( Table t, int row, int lastSerNum ) {
+  // Datastream from database is very different from reading from flat files
+  // The columns no longer match. And Database streaming has "Codes" instead of "Strategies"
   // serial number is derived from one of the arguments passed into the 
   // constructor
-  Function( Table t, int row, int lastSerNum ) {
+  // example INPUT:      -- NOTE: May change following implementation of "assessor"
+  // 103 [student20]   Y1  2x+3x+2x+3x-x-x   UNASSESSED   VASM|MT   annotation1|ann2
+  // 
     serialNum = lastSerNum + 1;
     postTime = t.getInt( row, 0 );
     cPostTime = new Post_Time( postTime, t.getString( row, 0 ) );
     studentID = t.getString( row, 1 );
     yOrder = t.getString( row, 2 );
     funcString = t.getString( row, 3 );
-    math1 = "";
-    math2 = "";
-    math3 = "";
-    social1 = "";
-    social2 = "";
-    social3 = "";
-    hit = loadStatus( t, row, 10 );
-    hitTxt = t.getString( row, 10 );
+    hit = loadStatus( t, row, 4 );
+    hitTxt = t.getString( row, 4 );
   } // end overloaded constructor
 
 

@@ -18,6 +18,9 @@ class Wave extends Section {
   int maxLevel, stepUpWindow, stepDownWindow, resetWindow;
   float rgbPropRate, rgbSmoothRate;
 
+  CodeCabinet codeCabinet;
+  ArrayList<String> selCodes;
+
 
 
   // Constructor
@@ -43,7 +46,7 @@ class Wave extends Section {
     rgbPropRate = ( 255 - 15 ) / maxLevel;
     
     ribbon = new Ribbon( this );
-
+    selCodes = new ArrayList<String>();
   } // end constructor
 
 
@@ -51,7 +54,8 @@ class Wave extends Section {
 
   // Methods
 
-  void sproutWave( String tempExerciseStart, String tempExerciseTitle ) {
+  void sproutWave( String tempExerciseStart, String tempExerciseTitle, CodeCabinet cc ) {
+  // when run, data is plugged-in and the wave is started / sprouted
     setStartTime( tempExerciseStart );
     setTitle( tempExerciseTitle );
     pdfName = tempExerciseStart + ".pdf";
@@ -59,12 +63,19 @@ class Wave extends Section {
     cMaxPostTime = new Post_Time( 0, tempExerciseStart );
     cMinPostTime = new Post_Time( 0, tempExerciseStart );
     title = tempExerciseTitle;
+    codeCabinet = cc;
+    println( " codeCabinet is : " + codeCabinet );
+    for( CodeItem ci : codeCabinet.codeItemsList )
+      println( "\t" + ci );
+      println( "NOTE HERE:" );
+      println( codeCabinet.codeItemsDictionary.get( "ASMD" ) );
   } // end sproutWave()
 
 
 
 
   void growWave( Table t ) {
+  // Needs to be commented and reworked
     int wpCountBefore = wavePoints.size();
     super.populateFuncs( t );
     print( "Applying Datastream to Wave ... " );

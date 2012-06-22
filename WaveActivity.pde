@@ -45,7 +45,7 @@ class WaveActivity extends LVActivity {
   
   void render() {
     super.render();
-    if( hasNewDatastream )
+    if( hasNewDatastream ) // hasNewDatastream is set in LVActivity.updateDataStream()
       processDatastream( databaseStream );
     prepForNextDatastream();
     View renderer = aUI.view;
@@ -65,7 +65,7 @@ class WaveActivity extends LVActivity {
 
     // create a new wave and put in activity details into it
     print( "Creating new Wave using provided details: " + aDetails[ 1 ] + " " + aDetails[ 2 ] + " ... " );
-    wave.sproutWave( aDetails[ 1 ], aDetails[ 2 ] );
+    wave.sproutWave( aDetails[ 1 ], aDetails[ 2 ], codeCabinet ); // pass codeCabinet to Wave
     println( "[DONE]" );
   } // end startWave()
 

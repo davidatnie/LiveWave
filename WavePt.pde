@@ -8,6 +8,7 @@ class WavePt extends Function {
   Student student;
   Wave owner;
   String annotation;
+  ArrayList <CodeItem> codes;
   float x1InView, y1InView, x2InView, y2InView;  // the "Screen" x and y values when it is being rendered inside a scrollable View
   boolean isSelected;
   boolean mouseOver;
@@ -18,15 +19,19 @@ class WavePt extends Function {
   // Constructor
   WavePt( Wave o, Table t, int row, int tempSN ) {
     // WavePoints are created after Wave is created
+    // example OUTPUT:      -- NOTE: May change following implementation of "assessor"
+  // 103 [student20]   Y1  2x+3x+2x+3x-x-x   UNASSESSED   VASM|MT   annotation1|ann2
     //
     super( t, row, tempSN );
     owner = o;
+    readCodes( t, row, 7 );
+    readAnnotation( t, row, 8 );
     println( " studentID " + studentID );
     student = owner.getStudent( studentID );
     println( "student with ID " + studentID + " added : " + ( student != null ) );
     isSelected = false;
     mouseOver = false;
-    annotation = "";
+    //annotation = "";
     intensityScore = 0;
     x = o.x;
     y = o.y;
@@ -35,6 +40,39 @@ class WavePt extends Function {
 
 
   // Methods
+
+  void readCodes( Table t, int r, int c ) {
+    println( "reading code : " );
+    codes = new ArrayList <CodeItem>();
+    println( "RAW: " + t.getString( r, c ) );
+    String[] pieces = splitTokens( t.getString( r, c ), "|" );
+    println( "PIECES : " );
+    println( pieces );
+    if( pieces.length > 0 ) 
+      for( String p : pieces ){
+        CodeItem ci = owner.codeCabinet.codeItemsDictionary.get( p );
+        println( "\tadding " + p );
+        codes.add( ci ); 
+      } 
+  } // end readCodes()
+
+
+
+
+  void readAnnotation( Table t, int r, int c ) {
+      annotation = "";
+      String[] pieces = splitTokens( t.getString( r, c ), "|" );
+      if( pieces.length > 0 )
+        annotation = pieces[ 0 ];
+        if( pieces.length > 1 )
+          for( int i = 1; i < pieces.length; i++ ) {
+            annotation += ( "\n" + pieces[ i ] );
+            println( annotation );
+          }
+  } // end readAnnotation()
+
+
+
 
   void updateWaveRad() {
     // calculates the radius for this wavePoint, by mapping
@@ -129,7 +167,12 @@ class WavePt extends Function {
 
 
   void drawMouseOver( View v ) {
-    String s1 = funcString;
+    String dispCodes = "          ";
+    for( CodeItem ci : codes ){
+      if( ci != null && ci.dispName != null )
+        dispCodes = dispCodes + ci.dispName + "     ";
+    }
+    String s1 = funcString + dispCodes;
     String s2 = student.studentID + "    @ " + cPostTime;
     String s3 = annotation;
     v.putTextSize( 20 );
@@ -169,7 +212,7 @@ class WavePt extends Function {
     rectMode( CORNERS );
     v.putRect( lx1, ly1, lx2, ly2 );
     fill( popUpTxt );
-    v.putText( funcString, lx1+whiteSpace, (ly1+v.viewTextSize) );
+    v.putText( s1, lx1+whiteSpace, (ly1+v.viewTextSize) );
     v.putTextSize( 12 );
     v.putText( student.studentID + "    @ " + cPostTime, lx1+whiteSpace, ly1+4*v.viewTextSize );
     v.putTextSize( 20 );
