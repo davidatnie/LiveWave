@@ -28,10 +28,12 @@ void setup() {
   aDetails[ 2 ] = actid + " " + cnameandcyear + " " + school + " " + teacher; 
   /*
   //use these for debugging
-  aDetails[ 0 ] = "http://203.116.116.34:80/getAllContributionsAfter?aid=8&ind=0";
+  //aDetails[ 0 ] = "http://203.116.116.34:80/getAllContributionsAfter?aid=8&ind=0";
+  aDetails[ 0 ] = "http://localhost:9000/getAllContributionsAfterVerbose?aid=1&ind=0";
   aDetails[ 1 ] = "15:00:00";
   aDetails[ 2 ]  = "Testing";
   */
+  
   wva = new WaveActivity( this );
   wva.startWave( aDetails );
   

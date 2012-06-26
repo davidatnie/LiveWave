@@ -232,9 +232,6 @@ class PopUpCodeChooser extends Frame{
 
     prevB.addActionListener( new ActionListener() {
       public void actionPerformed( ActionEvent e ) {
-        
-        selCodes = updateSelCodes( getUnchecked( displayedCBs ), getChecked( displayedCBs ) );
-
         if( shownIndex >= 10 ) {
           clearDisplayedCBs();
           shownIndex -= 10;

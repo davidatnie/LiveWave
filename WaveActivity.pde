@@ -97,7 +97,7 @@ class WaveActivity extends LVActivity {
       if( POInputTitle.length() > 40 ) {
         POInputTitle = POInputTitle.substring( 0, 37 ) + "...";
       }
-      poInput = new PopUpInput( this, wpMO, POInputTitle, "Type in text below:", wpMO.annotation );
+      poInput = new PopUpInput( this, wave.codeCabinet, wpMO, POInputTitle, "Type in text below:", wpMO.annotation );
     }
   }
 

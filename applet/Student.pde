@@ -34,18 +34,20 @@ class Student {
   // Methods
 
   void display( View v, int printPos ) {
-    float whiteSpace = 10;
-    v.putTextFont( waveFont, 15 );
-    x1InView = whiteSpace;
-    x2InView = x1InView + textWidth( studentID );
-    y2InView = printPos * 15; // NOTE: assuming row height is 15 pixels per row
-    y1InView = y2InView - v.viewTextSize;
-    fill( 0 );
-    v.putText( studentID, x1InView, y2InView );
+    if( dispOrder != -1 ) {
+      float whiteSpace = 10;
+      v.putTextFont( waveFont, 15 );
+      x1InView = whiteSpace;
+      x2InView = x1InView + textWidth( studentID );
+      y2InView = printPos * 15; // NOTE: assuming row height is 15 pixels per row
+      y1InView = y2InView - v.viewTextSize;
+      fill( 0 );
+      v.putText( studentID, x1InView, y2InView );
 
-    updateMouseOVer( v );
-    if( mouseOver )
-      drawMouseOver( v );
+      updateMouseOVer( v );
+      if( mouseOver )
+        drawMouseOver( v );
+    }
   } // end display()
 
 
@@ -112,6 +114,7 @@ class Student {
 
 
 
+
   Student callFor( String sid ) {
     if( sid.equals( studentID ) )
       return this;
@@ -149,6 +152,29 @@ class Student {
   void resetOrder() {
     dispOrder = serialNum;
   } // end resetOrder()
+
+
+
+
+  boolean hasWpSelCodes( ArrayList<String> input ) {
+    boolean ret = false;
+    for( WavePt wp : wavePoints )
+      if( wp.hasSelCodes( input ) )
+        ret = true;
+    return ret;
+  } // end hasWpSelCodes()
+
+
+
+
+  boolean hasWpNoCodes() {
+    boolean ret = false;
+    for( WavePt wp : wavePoints )
+      if( wp.hasNoCodes() )
+        ret = true;
+    return ret;
+  } // end hasWpNoCodes()
+
 
 
 

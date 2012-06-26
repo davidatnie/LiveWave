@@ -18,6 +18,10 @@ class Wave extends Section {
   int maxLevel, stepUpWindow, stepDownWindow, resetWindow;
   float rgbPropRate, rgbSmoothRate;
 
+  CodeCabinet codeCabinet;
+  ArrayList<String> selCodes;
+  String selCodesDisp, selCodesDispPrev;
+
 
 
   // Constructor
@@ -51,7 +55,8 @@ class Wave extends Section {
 
   // Methods
 
-  void sproutWave( String tempExerciseStart, String tempExerciseTitle ) {
+  void sproutWave( String tempExerciseStart, String tempExerciseTitle, CodeCabinet cc ) {
+  // when run, data is plugged-in and the wave is started / sprouted
     setStartTime( tempExerciseStart );
     setTitle( tempExerciseTitle );
     pdfName = tempExerciseStart + ".pdf";
@@ -59,12 +64,24 @@ class Wave extends Section {
     cMaxPostTime = new Post_Time( 0, tempExerciseStart );
     cMinPostTime = new Post_Time( 0, tempExerciseStart );
     title = tempExerciseTitle;
+    codeCabinet = cc;
+    for( CodeItem ci : codeCabinet.codeItemsList )
+      println( "\t" + ci );
+    selCodes = new ArrayList<String>();
+    for( CodeItem ci : codeCabinet.codeItemsList )
+      selCodes.add( ci.dispName );
+      CodeCategory ccg = codeCabinet.codeCategoriesDictionary.get( "Math" );
+      for( CodeItem ci : ccg.codeItems )
+        println( ccg.dispName + "-=" + ci.dispName );
+        
+    selCodesDisp = setSelCodesDisp( selCodes );
   } // end sproutWave()
 
 
 
 
   void growWave( Table t ) {
+  // Needs to be commented and reworked
     int wpCountBefore = wavePoints.size();
     super.populateFuncs( t );
     print( "Applying Datastream to Wave ... " );
@@ -138,8 +155,8 @@ class Wave extends Section {
     println( "tempLastCountForFuncs, tempFuncs.size() - tempTable.size() " + tempLastCountForFuncs + " " + tempFuncs.size() + "-" + tempTable.getRowCount() );
     for( int i = tempLastCountForFuncs; i < tempFuncs.size(); i++ ) {
       Function tf = tempFuncs.get( i );
-      println( "adding wavePoint.. " );
-      println( tf );
+      //println( "adding wavePoint.. " );
+      //println( tf );
       wavePoints.add( new WavePt( this, tempTable, i - tempLastCountForFuncs + 1, tf.serialNum ) );
     } // end for i
   } // end addWavePoints()
@@ -192,7 +209,7 @@ class Wave extends Section {
     stroke( 0 );
     fill( 90 );
     if( hasData )
-      printFunctions( r );
+      printFunctions( r, selCodes );
     else 
       drawLabel( "No Data For This Class", 30, r, "CENTER" );
    r.repositionScrollPosBtns();
@@ -201,25 +218,38 @@ class Wave extends Section {
   
 
   
-  void printFunctions( View r ) {
-  // prints the Function equations on the View
+  void printFunctions( View r, ArrayList<String> sc ) {
+  // prints the Function equations which has at least one Code in the 
+  // Selected Codes list  on to the View. Hides the rest of the equations.
   // 
-    int printPos = 0;
+
+    // First, hide everything
+    for( Student s : students )
+      s.dispOrder = -1;
+    for( WavePt wp : wavePoints )
+      wp.dispOrder = -1;
+
+    // Then, reassign dispOrder for all students and wavepoints
+    // if they contain at least one code that are in the selCodes list
+    // OR, if they contain NO codes
+    
+    int dispOrder = 0;
 
     for( Student s : students ) {
-      printPos++;
-      s.display( r, printPos );
-              
-      for( WavePt wp : wavePoints ) {
-        if( wp.student.studentID.equals( s.studentID ) ) {
-
-          printPos++;
-          wp.display( r, printPos );
-        } else {
-          //wp.hide( r );  
-        }
-      } // end for wavePoints
-    } // end for students
+      if( s.hasWpSelCodes( selCodes ) || s.hasWpNoCodes() ) {
+        s.dispOrder = dispOrder;
+        dispOrder++;
+        s.display( r, dispOrder );
+        
+        for( WavePt wp : s.wavePoints ) {
+          if( wp.hasSelCodes( selCodes ) || wp.hasNoCodes() ) {
+            wp.dispOrder = dispOrder;
+            dispOrder++;
+            wp.display( r, dispOrder ); 
+          }
+        } // end for wp
+      }
+    } // end for s
   } // end printFunctions()
 
 
@@ -267,6 +297,7 @@ class Wave extends Section {
         */
       } // end for wavePoints
       ribbon.display( r );
+      printSelCodesDisp();
     }
   } // end drawWave()
 
@@ -340,5 +371,21 @@ class Wave extends Section {
 
 
 
+
+  String setSelCodesDisp( ArrayList<String> input ) {
+    String ret = "";
+    for( String s : input )
+      ret += s + "   ";
+    return ret;
+  } // end setSelCodesDisp()
+
+
+
+
+  void printSelCodesDisp() {
+    fill( popUpTxt );
+    textSize( 12 );
+    text( "Showing :      " + setSelCodesDisp( selCodes ), 300, 80  );
+  } // end printSelCodesDisp()
 
 } // end class Wave

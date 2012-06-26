@@ -1,6 +1,7 @@
 class WaveUI extends AUI {
 
   // Fields
+  PopUpCodeChooser pucc;
 
 
 
@@ -16,6 +17,9 @@ class WaveUI extends AUI {
      String[] bleh = { "a", "b", "c" };
      d.buildDDItems( bleh );
      */
+      
+    createSpButton( o.x2Frame - 120, o.y1Frame + 50, o.x2Frame - 20, o.y1Frame + 90, getNextIndexArrSpButtons(), "Choose Code(s)", color( 0, 0, 0 ), color( 180, 180, 180 ), color( 250, 250, 250 ), butPress );
+
     owner = o;
   } // end constructor
 
@@ -26,13 +30,23 @@ class WaveUI extends AUI {
 
   @Override
     void executeMousePressed() {
-    if ( mouseButton == LEFT ) {      
+
+    WaveActivity downcasted = ( WaveActivity ) owner;
+    Wave currentWave = downcasted.wave;
+    if ( mouseButton == LEFT ) { 
+      
+      int whichOne = getPressedArrSpButton();
+      if( whichOne == 0 ) { // "Choose Code(s)"
+        if( pucc!= null) 
+          pucc.dispose();
+        pucc= new PopUpCodeChooser( downcasted, currentWave.codeCabinet, currentWave.selCodes );
+      }
+           
       processClickedView();
       processClickedWavePoint();
       // For Dropdowns
       processClickedDropdown();
     } else if( mouseButton == RIGHT ) {
-      WaveActivity downcasted = ( WaveActivity ) owner;
       downcasted.openPopUpInput();
     }
   } // end executeMousePressed()
