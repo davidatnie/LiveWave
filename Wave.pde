@@ -22,6 +22,7 @@ class Wave extends Section {
   ArrayList<String> selCodes;
   String selCodesDisp, selCodesDispPrev;
 
+  ArrayList<String> selEqs;
 
 
   // Constructor
@@ -75,6 +76,7 @@ class Wave extends Section {
         println( ccg.dispName + "-=" + ci.dispName );
         
     selCodesDisp = setSelCodesDisp( selCodes );
+    selEqs = new ArrayList<String>();
   } // end sproutWave()
 
 
@@ -92,6 +94,9 @@ class Wave extends Section {
     processWavePoints( wpCountBefore, wpCountAfter );
     ribbon.updateMinsCount();
     println( "finished going trhough growWave()" );
+    markForDisplay( selCodes );
+    sortBy( selEqs );
+    println( wavePoints.size() );
   } // end growWave()
 
 
@@ -223,34 +228,100 @@ class Wave extends Section {
   // Selected Codes list  on to the View. Hides the rest of the equations.
   // 
 
-    // First, hide everything
-    for( Student s : students )
-      s.dispOrder = -1;
-    for( WavePt wp : wavePoints )
-      wp.dispOrder = -1;
 
-    // Then, reassign dispOrder for all students and wavepoints
-    // if they contain at least one code that are in the selCodes list
-    // OR, if they contain NO codes
-    
-    int dispOrder = 0;
+  // NOTE : MUST THINK TRHOUGH THE STEPS - SHOULD JUST PUT MARKFORDISPLAY() AND SORTBY() HERE ? IF NOT, HOW WOULD NEW INCOMING DATA BE DISPLAYED WHEN THERE'S A NEW DATASTREAM COMING IN?
 
     for( Student s : students ) {
-      if( s.hasWpSelCodes( selCodes ) || s.hasWpNoCodes() ) {
-        s.dispOrder = dispOrder;
-        dispOrder++;
-        s.display( r, dispOrder );
-        
+      if( s.onShow ) {
+        s.display( r, s.dispOrder );
+        println( "NOW PRINTING " + s.studentID );
+        for( WavePt wp : s.wavePoints )
+          if( wp.onShow )
+            wp.display( r, wp.dispOrder );
+      }
+    }
+  } // end printFunctions()
+
+
+
+
+  void markForDisplay( ArrayList<String> sc ) {
+  // this should be called everytime there's a change in the
+  // selected Code(s) to display, or immediately following
+  // incoming of new dataStream()
+    /*
+    if( sc.isEmpty() ) {
+      // show everything
+      for( Student s : students )
+        s.onShow = true;
+      for( WavePt wp : wavePoints )
+        wp.onShow = true;
+    } else { */
+      for( Student s : students ) {
+        if( s.hasWpSelCodes( selCodes ) || s.hasWpNoCodes() ) {
+          println( "showing " + s.studentID );
+          s.onShow = true;
+        } else
+          s.onShow = false;
+          
         for( WavePt wp : s.wavePoints ) {
           if( wp.hasSelCodes( selCodes ) || wp.hasNoCodes() ) {
-            wp.dispOrder = dispOrder;
-            dispOrder++;
-            wp.display( r, dispOrder ); 
-          }
+            println( "\tshowing " + wp );
+            wp.onShow = true;
+          } else
+            wp.onShow = false;
         } // end for wp
-      }
-    } // end for s
-  } // end printFunctions()
+      } // end for s 
+    //} // end else   
+  } // end markForDisplay()
+
+
+
+
+  void sortBy( ArrayList<String> eqs ) {
+  // This must be run ONLY AFTER markForDisplay()
+  // and following that, AFTER loadSelectedEqs()
+  //
+    println( "BEFORE SORTING is contributor on Show? " + students.get( 0 ).onShow );
+    Collections.sort( students, new StudentComparator( eqs ) );
+    println( "AFTER SORTING is contributor on Show? " + students.get( 0 ).onShow );
+    int dispOrder = 1;
+    for( int is = 0; is < students.size(); is++ ) {
+      Student s = students.get( is );
+      if( s.onShow ) {
+        s.dispOrder = dispOrder;
+        println( dispOrder );
+        dispOrder++;
+      } else
+        s.dispOrder = -1;
+      Collections.sort( s.wavePoints, new WavePtComparator( eqs ) );
+      for( int iw = 0; iw <s.wavePoints.size(); iw++ ) {
+        WavePt wp = s.wavePoints.get( iw );
+        if( wp.onShow ) {
+          wp.dispOrder = dispOrder;
+          println( "\t" + dispOrder );
+          dispOrder++;
+        } else
+          wp.dispOrder = -1;
+      } // end for iw
+    } // end for is
+  } // end sortBy()
+
+
+
+  
+  void loadSelectedEqs( ArrayList<String> sels ) {
+  // this should be called ONLY AFTER markForDisplay()
+  // and it should be caled BEFORE sortBy()
+    if( sels.isEmpty() == false )
+      for( WavePt wp: wavePoints ) {
+        if( wp.onShow )
+          if( sels.contains( wp.funcString ) )
+            wp.isSelected = true;
+          else
+            wp.isSelected = false;
+      } // end for  
+  } // end loadSelectedEqs()
 
 
 

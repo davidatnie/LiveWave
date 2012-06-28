@@ -6,7 +6,9 @@ class Student {
   ArrayList <WavePt> wavePoints;
   int serialNum, dispOrder;
   float x1InView, y1InView, x2InView, y2InView;
-  boolean mouseOver
+  boolean mouseOver;
+  boolean onShow;
+  int sortingIndex;
 
 
 ;
@@ -27,6 +29,8 @@ class Student {
     x2InView = -1;
     y2InView = -1;
     mouseOver = false;
+    onShow = true;
+    sortingIndex = dispOrder;
   } // end constructor
 
 
@@ -136,6 +140,81 @@ class Student {
 
 
 
+
+  boolean hasFunction( ArrayList<String> fs ) {
+    int numHit = 0;
+    for( String fString : fs ) {
+      if( hasFunction( fs ) )
+        numHit++;  
+    }
+    if( numHit == 0 )
+      return false;
+    else
+      return true;
+  } // end hasFunction()
+
+
+
+
+  int countDisplayedWps() {
+    int num = 0;
+    for( WavePt wp : wavePoints )
+      if( wp.onShow )
+        num++;
+    return num;
+  } // end countDisplayedWps()
+
+
+
+  
+  int getPostTimeFor( String eq ) {
+    if( getWavePoint( eq ) == null )
+      return -1;
+    else
+      return getWavePoint( eq ).postTime;
+  } // end getPostTimeFor()
+
+
+
+  int getPostTimeFor( ArrayList<String> eqs ) {
+    int earliest = 30000;
+    for( String eq : eqs )
+      if( getPostTimeFor( eq ) <= earliest )
+        earliest = getPostTimeFor( eq );
+    return earliest;
+  } // end getPostTimeFor()
+
+
+
+
+  int getEarliestPostTime() {
+    int earliest = 30000;
+    if( wavePoints == null || countDisplayedWps() == 0 )
+      return -1;
+    else {
+      for( WavePt wp : wavePoints )
+        if( wp.onShow )
+          if( wp.postTime <= earliest )
+            earliest = wp.postTime;
+    }
+    return earliest;
+  } // end getEarliestPostTime()
+
+
+
+
+  int getEarliestPostTimeForSelEqs( ArrayList<String> sel ) {
+    int earliest = 30000;
+    for( WavePt wp : wavePoints )
+      if( wp.onShow ) 
+        if( wp.postTime < earliest )
+          earliest = wp.postTime;
+    return earliest;
+  } // end getEarliestPosttimeForSelEqs()
+
+
+
+
   WavePt getWavePoint( String fString ) {
     for( int i = 0; i < wavePoints.size(); i++ ) {
       WavePt w = wavePoints.get( i );
@@ -174,6 +253,7 @@ class Student {
         ret = true;
     return ret;
   } // end hasWpNoCodes()
+
 
 
 

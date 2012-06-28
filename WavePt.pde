@@ -12,6 +12,8 @@ class WavePt extends Function {
   float x1InView, y1InView, x2InView, y2InView;  // the "Screen" x and y values when it is being rendered inside a scrollable View
   boolean isSelected;
   boolean mouseOver;
+  boolean onShow;
+  int sortingIndex;
 
 
 
@@ -35,6 +37,7 @@ class WavePt extends Function {
     intensityScore = 0;
     x = o.x;
     y = o.y;
+    onShow = true;
   } // end constructor
 
 
@@ -239,10 +242,11 @@ class WavePt extends Function {
 
 
   boolean hasNoCodes() {
-    if( codes.isEmpty() )
+    if( codes.isEmpty() ) {
       return true;
-    else
+    } else {
       return false;
+    }  
   } // end hasNoCodes()
   
 } // end class WavePt
