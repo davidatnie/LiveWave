@@ -57,7 +57,7 @@ class WaveActivity extends LVActivity {
 
 
 
-  void startWave( String[] aDetails ) {
+  void startWave( String[] aDetails, Long actid, String hostip ) {
   // aDetails [0] [1] [2] is url, startTime and title
   //
     println( "in WaveActivity.startWave(), now calling super.startLV()" );
@@ -65,8 +65,9 @@ class WaveActivity extends LVActivity {
 
     // create a new wave and put in activity details into it
     print( "Creating new Wave using provided details: " + aDetails[ 1 ] + " " + aDetails[ 2 ] + " ... " );
-    wave.sproutWave( aDetails[ 1 ], aDetails[ 2 ], codeCabinet ); // pass codeCabinet to Wave
-    println( "[DONE]" );
+    wave.sproutWave( aDetails[ 1 ], aDetails[ 2 ], actid,  codeCabinet ); // pass codeCabinet to Wave
+    wave.hostip = hostip;
+    //println( "[DONE]" );
   } // end startWave()
 
 

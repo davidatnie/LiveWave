@@ -37,7 +37,9 @@ class Table {
       }
       
       // split the row on the tabs
-      String[] pieces = split(rows[i], "\t");
+      // String[] pieces = split(rows[i], "\t");
+      String[] pieces = fixedSplitToken( rows[ i ], "\t", 9  );
+
       columnCount = pieces.length; // number of columns - value starts from 1 and not 0.
       // copy to the table array
       data[rowCount] = pieces;
@@ -224,6 +226,26 @@ class Table {
     writer.flush();
   } // end write()
 
+
+
+
+  String[] fixedSplitToken( String row, String tkn, int targetCol ) {
+    String input = row;
+    String token = tkn;
+    int colCount = targetCol;
+    String[] ret = new String[ colCount ];
+
+    int i = 0;
+    int j = input.indexOf( token, i+1 );
+    for( int index = 0; index < colCount - 1; index++ ) {
+      String nextpiece = input.substring( i, j );
+      ret[ index ] = nextpiece;
+      i = j+1;
+      j = input.indexOf( token, i );
+    }
+    ret[ colCount-1 ] = input.substring( i );
+  return ret;
+} // end fixedSplitToken()
 
 
 

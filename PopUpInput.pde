@@ -7,7 +7,7 @@ import java.awt.Frame;
 import java.awt.Panel;
 import java.awt.Color;
 import java.awt.event.*;
-
+import com.myjavatools.web.*;
 
 
 
@@ -143,7 +143,7 @@ class PopUpInput extends Frame{
         contents = input.getText();
         wpCodes = updateWpCodes( getUnchecked( displayedCBs ), getChecked( displayedCBs ) );
         if( contentChanged() )
-          sendNewContent();
+          sendNewContents();
         if( wpCodesChanged() )
           sendNewWpCodes();
 	dispose();
@@ -248,8 +248,9 @@ class PopUpInput extends Frame{
     add( nextB );
     add( prevB );
     paintDisplayedCBs();
-
   } // end constructor
+
+
 
 
   // Methods
@@ -449,18 +450,19 @@ class PopUpInput extends Frame{
 
 
 
-  void sendNewContent() {
-    String toSend = consolidateContent();
-    // sendToDatabase( annotationURL, toSend );
+  void sendNewContents() {
+    postAnnotationToDatabase();
     referredPt.annotation = contents; // update Visualizer
-  } // end sendNewContent()
+  } // end sendNewContents()
 
 
 
 
   void sendNewWpCodes() {
     String toSend = consolidateWpCodes();
-    // sendToDatabase( codeItemsURL, toSend );
+    // using HTTP GET
+    println( loadStrings( "http://" + referredPt.owner.hostip + "/setCodingsForContribution?sessionId="+referredPt.owner.actid + "&sequence=" + referredPt.serialNum + "&codings=" +  toSend ) + ": Codes sent." );
+    // update Visualizer
     ArrayList<CodeItem> newWpCodes = new ArrayList<CodeItem>();
     for( String s : wpCodes )
       newWpCodes.add( new CodeItem( s ) );
@@ -469,11 +471,18 @@ class PopUpInput extends Frame{
 
 
 
+
   String consolidateContent() {
     String ret = "";
-    String[] newContentspieces = splitTokens( contents, "\n" );
-    for( String s : newContentspieces )
-      ret += s + "|";
+    if( contents.equals("") == false ) {
+      String[] newContentspieces = splitTokens( contents, "\n" );
+      ret = newContentspieces[ 0 ];
+      if( newContentspieces.length > 1 ) {
+        for( int i = 1; i < newContentspieces.length; i++ ) {
+          ret += "|" + newContentspieces[ i ];
+        }
+      }
+    }
     return ret;
   } // consolidatedContent()
   
@@ -482,12 +491,57 @@ class PopUpInput extends Frame{
   
   String consolidateWpCodes() {
     String ret = "";
-    for( String s : wpCodes )
-      ret += s + "|";
+    if( wpCodes.isEmpty() == false ) {
+      ret += prepCode( wpCodes.get( 0 ) );
+      for( int i = 1; i < wpCodes.size(); i++ ) {
+        ret += "|" + prepCode( wpCodes.get( i ) );
+      }
+    }
     return ret;
   } // end consolidateWpCodes()
+
+
+
+
+  String prepCode( String citem ) {
+    CodeItem tempCI = codeCabinet.codeItemsDictionary.get( citem );
+    return( codeCabinet.codeBook.get( tempCI ).dispName + ":" + citem  );
+  } // end prepCode()
   
   
   
   
+  void postAnnotationToDatabase() {
+    Map<String, String> pairs = new HashMap<String, String>();
+    pairs.put( "sessionId", new Long( referredPt.owner.actid ).toString() );
+    pairs.put( "sequence", new Integer( referredPt.serialNum ).toString() );
+    pairs.put( "annotations", consolidateContent() );
+    println( "Sending Annotations to DG :" + consolidateContent() + " serialNum: " + referredPt.serialNum );
+    println( webPost( "http://" + referredPt.owner.hostip + "/setAnnotationsForContribution", pairs ) + ": Annotations posted." );
+  } // end postAnnotationToDatabase() 
+
+
+
+String webPost( String urlString, Map data ) {
+  try {
+    ClientHttpRequest req = new ClientHttpRequest( urlString );
+    req.setParameters( data);
+    InputStream serverInput = req.post();
+    InputStreamReader serverInputReader = new InputStreamReader( serverInput );
+    String inputLine = "";
+    BufferedReader br = new BufferedReader( serverInputReader );
+    inputLine = br.readLine();
+    //println( inputLine );
+    serverInput.close();
+    return( inputLine );
+  }
+  catch( IOException ex ) {
+     println( ex );
+     return( "FAILED - IOException occurred" );
+  }
+} // end webPost()
+
+
+
+
 } // end class PopUpInput

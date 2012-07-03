@@ -60,7 +60,7 @@ class LVActivity extends Activity {
     buildCodeCabinet();
     connectDB( aDetails[ 0 ] );
     baseURLAddress = makeBaseURLAddress( aDetails[ 0 ] );
-    activityDetails = aDetails[ 1 ] + "\t" + aDetails[ 2 ] + "\t\t\t\t\t"; // REMEMBER to tally number of \t-s with number of column in the dataset as this will become the column title row for the dataStream
+    activityDetails = aDetails[ 1 ] + "\t" + aDetails[ 2 ] + "\t\t\t\t\t\t\t"; // REMEMBER to tally number of \t-s with number of column in the dataset as this will become the column title row for the dataStream
 
   } // end startLV() 
 
@@ -127,10 +127,13 @@ class LVActivity extends Activity {
       // if looks ok, turn it into table and populate funcs then add spokes
       if( dataInRows[ 0 ].equals( "Contributions:" ) == true && dataInRows.length > 1 ) {
         lastIndexReceived = updateLastIndexReceived( dataInRows );
+        println( "uncleaned dataInRows is : " );
+        println( dataInRows );
         dataInRows = cleanRows( dataInRows );
-        //println( "cleaned dataInRows is: " );
-        //println( dataInRows ); // check to see if dataInRows is now in the desired format
+        println( "cleaned dataInRows is: " );
+        println( dataInRows ); // check to see if dataInRows is now in the desired format
 	databaseStream = new Table( dataInRows );
+        println( "Column Count in databaseStream : " + databaseStream.getColumnCount() );
         hasNewDatastream = true;
         // NOTE: children classes will need to check if 
         // hasNewDatastream is true, before running their processDatastream() method
@@ -314,9 +317,10 @@ class LVActivity extends Activity {
   //
     int irrelevantRows = 0;
     for( int i = 1; i < tbCleaned.length - 1; i++ ) {
-      String[] cells = split( tbCleaned[ i ], "\t" );
+      
+      String[] cells = fixedSplitToken( tbCleaned[ i ], "\t", 8 ); 
       if( cells[ 1 ].equals( "EQUATION" ) == false ) { // discard non "EQUATION" contributions
-        tbCleaned[ i ] = "";         
+        tbCleaned[ i ] = ""; // overwrite the row with blank String        
         irrelevantRows++;
       }
     }
@@ -327,24 +331,47 @@ class LVActivity extends Activity {
     int nextPosCleaned = 1;
     for( int z = 1; z < tbCleaned.length; z++ ) {    
       if( tbCleaned[ z ].equals( "" ) == false ) {
-        String[] cells = split( tbCleaned[ z ], "\t" );
-        String tempR = "";
+        String[] cells = fixedSplitToken( tbCleaned[ z ], "\t", 8 );
+        String tempR = cells[ 0 ] + "\t";
         // sewing back all the columns received from database except 
         // the first two columns ( Contribution Index and Contribution Type )
         for( int k = 2; k < cells.length-2; k++ ) {
           tempR += cells[ k ] + "\t";  
         }
         tempR += "\tUNASSESSED\t" + cells[ cells.length-2 ] + "\t" + cells[ cells.length-1 ];
-
+        //println( tempR.replaceAll( "\t","*" ) );
         // NOTE: the line above mayneed to be changed following implementation of an assessor
         // for (Hit/No-Hit) for historical sessions.
 
-	cleaned[ nextPosCleaned ] = trim(tempR); 
+	cleaned[ nextPosCleaned ] = tempR;
 	nextPosCleaned++;
       }
     }
+    println( "VERIFY IF INDEED CLEANED:" );
+    println( cleaned );
     return cleaned; 
   }  // end cleanRows()
+  
+  
+  
+  String[] fixedSplitToken( String row, String tkn, int targetCol ) {
+    String input = row;
+    String token = tkn;
+    int colCount = targetCol;
+    String[] ret = new String[ colCount ];
+
+    int i = 0;
+    int j = input.indexOf( token, i+1 );
+
+    for( int index = 0; index < colCount - 1; index++ ) {
+      String nextpiece = input.substring( i, j );
+      ret[ index ] = nextpiece;
+      i = j+1;
+      j = input.indexOf( token, i );
+    }
+    ret[ colCount-1 ] = input.substring( i );
+  return ret;
+} // end fixedSplitToken()
 
 
 

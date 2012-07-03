@@ -50,6 +50,12 @@ class WaveUI extends AUI {
         pucc= new PopUpCodeChooser( downcasted, currentWave.codeCabinet, currentWave.selCodes );
       } else if( whichOne == 1 ) { // "SORT"
         downcasted.wave.sortBy( downcasted.wave.selEqs );
+      } else if( whichOne == 2 ) { // "COMMENT"
+
+      } else if( whichOne == 3 )  { // "LOAD"
+
+      } else if( whichOne == 4 ) { // "SAVE"
+
       }
            
       processClickedView();

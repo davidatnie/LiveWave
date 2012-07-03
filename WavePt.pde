@@ -26,7 +26,7 @@ class WavePt extends Function {
     //
     super( t, row, tempSN );
     owner = o;
-    readCodes( t, row, 7 );
+    readCodes( t, row, 7);
     readAnnotation( t, row, 8 );
     //println( " studentID " + studentID );
     student = owner.getStudent( studentID );
@@ -45,15 +45,16 @@ class WavePt extends Function {
   // Methods
 
   void readCodes( Table t, int r, int c ) {
-    //println( "reading code : " );
+    println( "reading code : " );
     codes = new ArrayList <CodeItem>();
-    //println( "RAW: " + t.getString( r, c ) );
-    String[] pieces = splitTokens( t.getString( r, c ), "|" );
-    //println( "PIECES : " );
-    //println( pieces );
-    if( pieces.length > 0 ) 
-      for( String p : pieces ){
-        CodeItem ci = owner.codeCabinet.codeItemsDictionary.get( p );
+    println( "RAW: " + t.getString( r, c ) );
+    String[] largePieces = splitTokens( t.getString( r, c ), "|" );
+   println( largePieces );
+    if( largePieces.length > 0 ) 
+      for( String p : largePieces ){
+        String[] smallPieces = splitTokens( p, ":" );
+        print( smallPieces[ 0 ] );
+        CodeItem ci = owner.codeCabinet.codeItemsDictionary.get( smallPieces[ 1 ] );
         //println( "\tadding " + p );
         codes.add( ci ); 
       } 
@@ -191,7 +192,7 @@ class WavePt extends Function {
     float rowCount = 3;
     float lx1 = ( (mouseX - v.x1a) - (maxText/2) - whiteSpace ) +v.xScrollPos1;
     float lx2 = lx1 + maxText + 2*whiteSpace;
-    float ly1 = ((mouseY-v.y1a) - rowCount*v.viewTextSize) - 5 - whiteSpace + v.yScrollPos1;
+    float ly1 = ( (mouseY-v.y1a) - (rowCount*v.viewTextSize) - whiteSpace - 5 ) + v.yScrollPos1;
     float ly2 = ly1 + rowCount*v.viewTextSize + 3*whiteSpace;
 
     // make sure mouseOver box will be displayd inside the View
@@ -203,7 +204,8 @@ class WavePt extends Function {
       float lWidth = lx2 - lx1;
       lx2 = v.xScrollPos2 - 20;
       lx1 = lx2 - lWidth;
-    } else if( ly1 < v.yScrollPos1 ) {
+    }
+    if( ly1 < v.yScrollPos1 ) {
       float lHeight = ly2 - ly1;
       ly1 = v.yScrollPos1 + 20;
       ly2 = ly1 + lHeight;

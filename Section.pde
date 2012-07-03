@@ -135,6 +135,12 @@ class Section {
     updateHasData();
     updateMinMaxPostTime();
     println( "funcs count is now: " + funcs.size() + " maxPostTime is now: " + maxPostTime + " [ DONE ]" );
+
+    println( "\t \t PRINTING FUNCTIONS: " );
+    for( int i = 0; i < funcs.size(); i++ ) {
+      Function f = (Function) funcs.get( i );
+      println( "\t \t " + f.serialNum + " " + f.funcString );
+    } 
   } // end populateFuncs()
 
 

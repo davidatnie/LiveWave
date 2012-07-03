@@ -28,14 +28,24 @@ void setup() {
   aDetails[ 2 ] = actid + " " + cnameandcyear + " " + school + " " + teacher; 
   */
   //use these for debugging
+  hostip = "localhost:9000";
+  school = "SST";
+  teacher = "Johari";
+  cnameandcyear = "test2012"; // << NOTE: need to check the value
+  cname = "test";
+  cyear = "2012";
+  actid = "1";
+  starttimeFull = "00:00:00"; 
+  starttimeTrimmed = "00:00:00"; 
+  functioncall = "getAllContributionsAfterVerbose";
+ 
   //aDetails[ 0 ] = "http://203.116.116.34:80/getAllContributionsAfter?aid=8&ind=0";
   aDetails[ 0 ] = "http://localhost:9000/getAllContributionsAfterVerbose?aid=1&ind=0";
   aDetails[ 1 ] = "15:00:00";
   aDetails[ 2 ]  = "Testing";
   
-  
   wva = new WaveActivity( this );
-  wva.startWave( aDetails );
+  wva.startWave( aDetails, Long.parseLong( actid ), hostip );
   
 } // end setup()
 

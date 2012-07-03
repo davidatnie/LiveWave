@@ -24,6 +24,11 @@ class Wave extends Section {
 
   ArrayList<String> selEqs;
 
+  Long actid;
+  String hostip; // value is set in WaveActivity.startWave()
+
+
+
 
   // Constructor
 
@@ -56,7 +61,7 @@ class Wave extends Section {
 
   // Methods
 
-  void sproutWave( String tempExerciseStart, String tempExerciseTitle, CodeCabinet cc ) {
+  void sproutWave( String tempExerciseStart, String tempExerciseTitle, Long id, CodeCabinet cc ) {
   // when run, data is plugged-in and the wave is started / sprouted
     setStartTime( tempExerciseStart );
     setTitle( tempExerciseTitle );
@@ -65,6 +70,7 @@ class Wave extends Section {
     cMaxPostTime = new Post_Time( 0, tempExerciseStart );
     cMinPostTime = new Post_Time( 0, tempExerciseStart );
     title = tempExerciseTitle;
+    actid = id;
     codeCabinet = cc;
     for( CodeItem ci : codeCabinet.codeItemsList )
       println( "\t" + ci );
@@ -93,7 +99,7 @@ class Wave extends Section {
     updateHasData();
     processWavePoints( wpCountBefore, wpCountAfter );
     ribbon.updateMinsCount();
-    println( "finished going trhough growWave()" );
+    //println( "finished going trhough growWave()" );
     markForDisplay( selCodes );
     sortBy( selEqs );
     println( wavePoints.size() );
@@ -234,7 +240,7 @@ class Wave extends Section {
     for( Student s : students ) {
       if( s.onShow ) {
         s.display( r, s.dispOrder );
-        println( "NOW PRINTING " + s.studentID );
+        // println( "NOW PRINTING " + s.studentID );
         for( WavePt wp : s.wavePoints )
           if( wp.onShow )
             wp.display( r, wp.dispOrder );
@@ -257,7 +263,12 @@ class Wave extends Section {
       for( WavePt wp : wavePoints )
         wp.onShow = true;
     } else { */
+
+        println( " >>> selCodes is : " + selCodes );
+      
       for( Student s : students ) {
+
+        println( " >>>> hasWpNoCodes is: " + s.hasWpNoCodes() );
         if( s.hasWpSelCodes( selCodes ) || s.hasWpNoCodes() ) {
           println( "showing " + s.studentID );
           s.onShow = true;

@@ -53,14 +53,14 @@ class Function {
   // example INPUT:      -- NOTE: May change following implementation of "assessor"
   // 103 [student20]   Y1  2x+3x+2x+3x-x-x   UNASSESSED   VASM|MT   annotation1|ann2
   // 
-    serialNum = lastSerNum + 1;
-    postTime = t.getInt( row, 0 );
-    cPostTime = new Post_Time( postTime, t.getString( row, 0 ) );
-    studentID = t.getString( row, 1 );
-    yOrder = t.getString( row, 2 );
-    funcString = t.getString( row, 3 );
-    hit = loadStatus( t, row, 4 );
-    hitTxt = t.getString( row, 4 );
+    serialNum = t.getInt( row, 0 );
+    postTime = t.getInt( row, 1 );
+    cPostTime = new Post_Time( postTime, t.getString( row, 1 ) );
+    studentID = t.getString( row, 2 );
+    yOrder = t.getString( row, 3 );
+    funcString = t.getString( row, 4 );
+    hit = loadStatus( t, row, 5 );
+    hitTxt = t.getString( row, 5 );
   } // end overloaded constructor
 
 
