@@ -45,15 +45,15 @@ class WavePt extends Function {
   // Methods
 
   void readCodes( Table t, int r, int c ) {
-    println( "reading code : " );
+    //println( "reading code : " );
     codes = new ArrayList <CodeItem>();
-    println( "RAW: " + t.getString( r, c ) );
+    //println( "RAW: " + t.getString( r, c ) );
     String[] largePieces = splitTokens( t.getString( r, c ), "|" );
-   println( largePieces );
+   //println( largePieces );
     if( largePieces.length > 0 ) 
       for( String p : largePieces ){
         String[] smallPieces = splitTokens( p, ":" );
-        print( smallPieces[ 0 ] );
+        //print( smallPieces[ 0 ] );
         CodeItem ci = owner.codeCabinet.codeItemsDictionary.get( smallPieces[ 1 ] );
         //println( "\tadding " + p );
         codes.add( ci ); 

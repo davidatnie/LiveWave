@@ -191,6 +191,7 @@ class PopUpCodeChooser extends Frame{
         selCodes = updateSelCodes( getUnchecked( displayedCBs ), getChecked( displayedCBs ) );
         WaveActivity downcasted = ( WaveActivity ) owner;
         downcasted.wave.selCodes = selCodes;
+        println( selCodes );
         downcasted.wave.markForDisplay( downcasted.wave.selCodes );
         downcasted.wave.sortBy( downcasted.wave.selEqs );
         dispose();

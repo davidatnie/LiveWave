@@ -23,9 +23,7 @@ void setup() {
   readParams(); // comment to debug, uncomment before deploying
   
   // use these for deployment 
-  aDetails[ 0 ] = "http://" + hostip + "/" + functioncall + "?aid=" + actid + "&ind=0";
-  aDetails[ 1 ] = starttimeTrimmed;  
-  aDetails[ 2 ] = actid + " " + cnameandcyear + " " + school + " " + teacher; 
+  buildADetails();
   */
   //use these for debugging
   hostip = "localhost:9000";
@@ -34,7 +32,7 @@ void setup() {
   cnameandcyear = "test2012"; // << NOTE: need to check the value
   cname = "test";
   cyear = "2012";
-  actid = "1";
+  actid = "0";
   starttimeFull = "00:00:00"; 
   starttimeTrimmed = "00:00:00"; 
   functioncall = "getAllContributionsAfterVerbose";
@@ -119,6 +117,14 @@ void readParams() {
   starttimeTrimmed = starttimeFull.substring( starttimeFull.length()-17, starttimeFull.length()-9 );
   functioncall = param( "functioncall" );
 } // end readParams() 
+
+
+
+void buildADetails() {
+  aDetails[ 0 ] = "http://" + hostip + "/" + functioncall + "?aid=" + actid + "&ind=0";
+  aDetails[ 1 ] = starttimeTrimmed;  
+  aDetails[ 2 ] = actid + " " + cnameandcyear + " " + school + " " + teacher; 
+} // end buildADetails()
 
 
 

@@ -57,7 +57,7 @@ class WaveActivity extends LVActivity {
 
 
 
-  void startWave( String[] aDetails, Long actid, String hostip ) {
+  void startWave( String[] aDetails, long actid, String hostip ) {
   // aDetails [0] [1] [2] is url, startTime and title
   //
     println( "in WaveActivity.startWave(), now calling super.startLV()" );

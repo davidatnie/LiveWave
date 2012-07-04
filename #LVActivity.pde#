@@ -119,21 +119,19 @@ class LVActivity extends Activity {
       println( "making request to database ..." );
       lastRequestTime = millis();
     }
-    
+
     // the cleanup & updating of lastIndexReceived:
     if( dataWholeChunk.equals( "" ) == false ) {
-      println( "\t\t\t >>> dataWholeChunk is: " + dataWholeChunk + " . " );
-
       String[] dataInRows = split( dataWholeChunk, "\n"); 
 
       // if looks ok, turn it into table and populate funcs then add spokes
       if( dataInRows[ 0 ].equals( "Contributions:" ) == true && dataInRows.length > 1 ) {
         lastIndexReceived = updateLastIndexReceived( dataInRows );
-        //println( "uncleaned dataInRows is : " );
-        //println( dataInRows );
+        println( "uncleaned dataInRows is : " );
+        println( dataInRows );
         dataInRows = cleanRows( dataInRows );
-        //println( "cleaned dataInRows is: " );
-        //println( dataInRows ); // check to see if dataInRows is now in the desired format
+        println( "cleaned dataInRows is: " );
+        println( dataInRows ); // check to see if dataInRows is now in the desired format
 	databaseStream = new Table( dataInRows );
         println( "Column Count in databaseStream : " + databaseStream.getColumnCount() );
         hasNewDatastream = true;
@@ -349,8 +347,8 @@ class LVActivity extends Activity {
 	nextPosCleaned++;
       }
     }
-    //println( "VERIFY IF INDEED CLEANED:" );
-    //println( cleaned );
+    println( "VERIFY IF INDEED CLEANED:" );
+    println( cleaned );
     return cleaned; 
   }  // end cleanRows()
   

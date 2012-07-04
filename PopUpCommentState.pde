@@ -35,7 +35,7 @@ class PopUpCommentState extends Frame {
 
     label = new Label( "Type in comments in the box below:" );
     label.setForeground( new Color( 255, 255, 0 ) );
-    label.setBounds( 20, 20, 460, 20 );
+    label.setBounds( 20, 30, 460, 20 );
     
     input = new TextArea( oldComments, 2, 30, 1 );
     input.setBackground( new Color( 255, 220, 200 ) );
@@ -43,7 +43,7 @@ class PopUpCommentState extends Frame {
 
     cancelB = new Button( "CANCEL" );
     cancelB.setBackground( new Color( 180, 180, 180 ) );
-    cancelB.setBounds( 200, 100, 100, 30 );
+    cancelB.setBounds( 200, 200, 100, 30 );
 
     cancelB.addActionListener( new ActionListener() {
       public void actionPerformed( ActionEvent e ) {
@@ -53,7 +53,7 @@ class PopUpCommentState extends Frame {
 
     okB = new Button( "OK" );
     okB.setBackground( new Color( 180, 180, 180 ) );
-    okB.setBounds( 350, 100, 100, 30 );
+    okB.setBounds( 350, 200, 100, 30 );
 
     okB.addActionListener( new ActionListener() {
       public void actionPerformed( ActionEvent e ) {
@@ -102,12 +102,14 @@ class PopUpCommentState extends Frame {
     }
     );    
 
+    add( label );
+    add( input );
+    add( cancelB );
+    add( okB );
+
   } // end constructor()
 
-  add( label );
-  add( input );
-  add( cancelB );
-  add( okB );
+  
 
  
 

@@ -1,0 +1,57 @@
+import java.awt.Button;
+import java.awt.Label;
+import java.awt.List;
+import java.awt.Frame;
+import java.awt.Color;
+import java.awt.event.*;
+
+
+
+class PopUpLoadState extends Frame {
+
+  // Fields
+
+  ArrayList<String> savedStates;
+  ArrayList<long> savedStateIDs;
+  HashMap<String, long> savedStatesDictionary;
+  LVActivity owner;
+  Wave referredWave;
+  Label label;
+  Button cancelB, loadB;
+  
+
+
+  // Constructor
+
+  PopUpLoadState( LVActivity o, Wave rw  ) {
+    super( "Load A Saved State" );
+    owner = o;
+    referredWave = rw;
+    savedStates = new ArrayList<String>();
+    savedStateIDs = new ArrayList<long>();
+    savedStatesDictionary = new HashMap<String, long>();
+    buildSavedStates();
+  } // end constructor
+
+
+
+
+  // Methods
+
+  void buildSavedStates() {
+  
+  } // end buildSavedStates()
+    String[] temp = loadStrings( "http://" + hostip + "/getWaveStates" );
+    for( String s : temp ) {
+      savedStates.add( s );
+      String[] pieces = splitTokens( s, "\t" );
+      long l = Long.parseLong( pieces[ 0 ] );
+      savedStateIDs.add( l );
+      println( "added: " + s + " to savedStates, and " + l + " to savedStateIDs"  );
+      savedStatesDictionary.put( s, l );
+    } 
+
+
+
+
+} // end class PopUpLoadstate

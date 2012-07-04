@@ -24,8 +24,12 @@ class Wave extends Section {
 
   ArrayList<String> selEqs;
 
-  Long actid;
+  long actid;
   String hostip; // value is set in WaveActivity.startWave()
+  
+  String comments;
+  String stateName;
+  long stateID;
 
 
 
@@ -53,6 +57,10 @@ class Wave extends Section {
     rgbPropRate = ( 255 - 15 ) / maxLevel;
     
     ribbon = new Ribbon( this );
+    
+    comments = "";
+    stateName = "";
+    stateID = -1; // -1 means NOT referring to oany states on the database
 
   } // end constructor
 
@@ -61,7 +69,7 @@ class Wave extends Section {
 
   // Methods
 
-  void sproutWave( String tempExerciseStart, String tempExerciseTitle, Long id, CodeCabinet cc ) {
+  void sproutWave( String tempExerciseStart, String tempExerciseTitle, long id, CodeCabinet cc ) {
   // when run, data is plugged-in and the wave is started / sprouted
     setStartTime( tempExerciseStart );
     setTitle( tempExerciseTitle );
@@ -256,8 +264,7 @@ class Wave extends Section {
   // selected Code(s) to display, or immediately following
   // incoming of new dataStream()
     /*
-    if( sc.isEmpty() ) {
-      // show everything
+    if( sc.isEmpty() ) {            // show everything
       for( Student s : students )
         s.onShow = true;
       for( WavePt wp : wavePoints )
@@ -267,17 +274,16 @@ class Wave extends Section {
         println( " >>> selCodes is : " + selCodes );
       
       for( Student s : students ) {
-
-        println( " >>>> hasWpNoCodes is: " + s.hasWpNoCodes() );
+        //println( " >>>> hasWpNoCodes is: " + s.hasWpNoCodes() );
         if( s.hasWpSelCodes( selCodes ) || s.hasWpNoCodes() ) {
-          println( "showing " + s.studentID );
+          //println( "showing " + s.studentID );
           s.onShow = true;
         } else
           s.onShow = false;
           
         for( WavePt wp : s.wavePoints ) {
           if( wp.hasSelCodes( selCodes ) || wp.hasNoCodes() ) {
-            println( "\tshowing " + wp );
+            //println( "\tshowing " + wp );
             wp.onShow = true;
           } else
             wp.onShow = false;
@@ -293,15 +299,15 @@ class Wave extends Section {
   // This must be run ONLY AFTER markForDisplay()
   // and following that, AFTER loadSelectedEqs()
   //
-    println( "BEFORE SORTING is contributor on Show? " + students.get( 0 ).onShow );
+    //println( "BEFORE SORTING is contributor on Show? " + students.get( 0 ).onShow );
     Collections.sort( students, new StudentComparator( eqs ) );
-    println( "AFTER SORTING is contributor on Show? " + students.get( 0 ).onShow );
+    //println( "AFTER SORTING is contributor on Show? " + students.get( 0 ).onShow );
     int dispOrder = 1;
     for( int is = 0; is < students.size(); is++ ) {
       Student s = students.get( is );
       if( s.onShow ) {
         s.dispOrder = dispOrder;
-        println( dispOrder );
+        //println( dispOrder );
         dispOrder++;
       } else
         s.dispOrder = -1;
@@ -310,7 +316,7 @@ class Wave extends Section {
         WavePt wp = s.wavePoints.get( iw );
         if( wp.onShow ) {
           wp.dispOrder = dispOrder;
-          println( "\t" + dispOrder );
+          //println( "\t" + dispOrder );
           dispOrder++;
         } else
           wp.dispOrder = -1;
