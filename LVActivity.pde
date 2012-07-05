@@ -313,15 +313,15 @@ class LVActivity extends Activity {
   // ensures  that each row contains the correct number of columns with 
   // correct column data in place.
   // example INPUT:
-  // 39	  EQUATION  103   [student20]   Y1   2x+3x+2x+3x-x-x    VASM|MT   annotation1|ann2
+  // 39	  TRUE   EQUATION  103   [student20]   Y1   2x+3x+2x+3x-x-x    VASM|MT   annotation1|ann2
   // example OUTPUT:      -- NOTE: May change following implementation of "assessor"
   // 103 [student20]   Y1  2x+3x+2x+3x-x-x   UNASSESSED   VASM|MT   annotation1|ann2
   //
     int irrelevantRows = 0;
     for( int i = 1; i < tbCleaned.length - 1; i++ ) {
       
-      String[] cells = fixedSplitToken( tbCleaned[ i ], "\t", 8 ); 
-      if( cells[ 1 ].equals( "EQUATION" ) == false ) { // discard non "EQUATION" contributions
+      String[] cells = fixedSplitToken( tbCleaned[ i ], "\t", 9 ); 
+      if( cells[ 1 ].equals( "true" ) == false || cells[ 2 ].equals( "EQUATION" ) == false ) { // discard non "EQUATION" contributions
         tbCleaned[ i ] = ""; // overwrite the row with blank String        
         irrelevantRows++;
       }
@@ -333,11 +333,13 @@ class LVActivity extends Activity {
     int nextPosCleaned = 1;
     for( int z = 1; z < tbCleaned.length; z++ ) {    
       if( tbCleaned[ z ].equals( "" ) == false ) {
-        String[] cells = fixedSplitToken( tbCleaned[ z ], "\t", 8 );
+        String[] cells = fixedSplitToken( tbCleaned[ z ], "\t", 9 );
         String tempR = cells[ 0 ] + "\t";
         // sewing back all the columns received from database except 
         // the first two columns ( Contribution Index and Contribution Type )
-        for( int k = 2; k < cells.length-2; k++ ) {
+        // NOTE: Validity column is NOT retained in the cleaned row
+        // So we'll start with the fourth column (index 3)
+        for( int k = 3; k < cells.length-2; k++ ) {
           tempR += cells[ k ] + "\t";  
         }
         tempR += "\tUNASSESSED\t" + cells[ cells.length-2 ] + "\t" + cells[ cells.length-1 ];

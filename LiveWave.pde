@@ -32,7 +32,7 @@ void setup() {
   cnameandcyear = "test2012"; // << NOTE: need to check the value
   cname = "test";
   cyear = "2012";
-  actid = "0";
+  actid = "1";
   starttimeFull = "00:00:00"; 
   starttimeTrimmed = "00:00:00"; 
   functioncall = "getAllContributionsAfterVerbose";

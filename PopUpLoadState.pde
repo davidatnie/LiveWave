@@ -72,30 +72,40 @@ class PopUpLoadState extends Frame {
         println( "name : " + list.getSelectedItem() );
         println( "id : " + savedStatesDictionary.get( list.getSelectedItem() ) );
         long idToLoad = savedStatesDictionary.get( list.getSelectedItem() );
-        String[] rep = loadStrings( "http://" + referredWave.hostip + "/retrieveWaveState?id=" + idToLoad );
-        if( rep[ 0 ].equals( null ) == false ){
-          println( rep[ 0 ] );
-          String[] pieces = fixedSplitToken( rep[ 0 ], "\t", 4 );
+        String[] replyDB = loadStrings( "http://" + referredWave.hostip + "/retrieveWaveState?id=" + idToLoad );
+        if( replyDB[ 0 ].equals( null ) == false ){
+          println( "Load reply from DB is: " + replyDB[ 0 ] );
+          String[] rep = fixedSplitToken( replyDB[ 0 ], "\t", 9 );
+          println( rep );
+          String newSchool = rep[ 0 ];
+          String newTeacher = rep[ 1 ];
+          String newClassAndYear = rep[ 2 ];
+          String newStarttimeFull = rep[ 3 ];
+  
+          println( rep[ 4 ] );
+          String[] pieces = splitTokens( rep[ 4 ], "|" );
           println( "pieces is: " );
           for( int i = 0; i < pieces.length; i++ )
             println( pieces[ i ] );
-          ArrayList<String> newSelCodes = turnToSelCodes( pieces[ 0 ] );
-          String newStateName = pieces[ 1 ];
-          String newActid = pieces[ 2 ];
-          ArrayList<String> newSelEqs = turnToSelEqs( pieces[ 3 ] );
+          ArrayList<String> newSelCodes = turnToSelCodes( rep[ 4 ] );
+          
+          String newStateName = rep[ 5 ];
+          String newActid = rep[ 6 ];
+          ArrayList<String> newSelEqs = turnToSelEqs( rep[ 7 ] );
+          String newComments = rep[ 8 ];
+
       
-          owner.owner.hostip = owner.owner.hostip; // <<< MISSING
-          owner.owner.school = owner.owner.school; // <<< MISSING
-          owner.owner.teacher = owner.owner.teacher; // <<< MISSING
-          owner.owner.cnameandcyear = owner.owner.cnameandcyear; // <<< MISSING
-          String[] cpieces = splitTokens( owner.owner.cnameandcyear, ":" );
-          owner.owner.cname = owner.owner.cname; // <<< MISSING
-          owner.owner.cyear = owner.owner.cyear; // <<< MISSING
-          //owner.owner.actid = newActid; // set actid; // OOPS -- problem in looking up Activtity with id:0
-          owner.owner.actid = "1"; // this is dummy data
-          owner.owner.starttimeFull = owner.owner.starttimeFull; // <<< MISSING
-          //owner.owner.starttimeTrimmed = owner.owner.starttimeFull.substring( starttimeFull.length()-17, starttimeFull.length()-9 );
-          owner.owner.functioncall = owner.owner.functioncall; // <<< MISSING
+          owner.owner.hostip = owner.owner.hostip; // retain hostip
+          owner.owner.school = newSchool;
+          owner.owner.teacher = newTeacher;
+          owner.owner.cnameandcyear = newClassAndYear;
+          String[] cpieces = splitTokens( newClassAndYear, ":" );
+          owner.owner.cname = cpieces[ 0 ];
+          owner.owner.cyear = cpieces[ 1 ];
+          owner.owner.actid = newActid;
+          owner.owner.starttimeFull = newStarttimeFull;
+          owner.owner.starttimeTrimmed = newStarttimeFull.substring( newStarttimeFull.length()-17, newStarttimeFull.length()-9 );
+          owner.owner.functioncall = owner.owner.functioncall; // retain functioncall
 
           owner.owner.buildADetails();
           println( "aDetails after re-building is: " ); 
@@ -112,20 +122,26 @@ class PopUpLoadState extends Frame {
           fill( 0, 0, 255 );
           while( owner.owner.wva.dataWholeChunk.contains( "MATCHING" ) == false ) {
            // do nothing, wait for data to come in and loaded
-           //if( count >= owner.owner.wva.wvaUI.view.xScrollPos2 - 100 )
-             //count--;
-           //else
-             //count ++;
+           
+           if( count >= owner.owner.wva.wvaUI.view.xScrollPos2 - 100 )
+             count--;
+           else
+             count ++;
            //println( count );
            stroke( 0, 0, 255 );
            fill( 0, 0, 255 );
+           owner.owner.wva.wvaUI.view.clearBackground();
            owner.owner.wva.wvaUI.view.putRect( 20+count, 20, 130+count, 120 ); 
+           fill( 255, 255, 0 );
+           owner.owner.wva.wvaUI.view.putText( "LOADING ... ", 40+count, 60 );
+           
           }
+          
           println( ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> OK NEW DATA IS IN <<<<<<<<<<<<<<<<<<<<<<<<<<<" );
  
           owner.owner.wva.wave.stateName = newStateName; // set wave.stateName
           owner.owner.wva.wave.stateID = idToLoad; // set wave.stateID 
-          owner.owner.wva.wave.comments = ""; // set wave.comments <<< MISSING
+          owner.owner.wva.wave.comments = newComments;
           owner.owner.wva.wave.selCodes = newSelCodes; // set wave.selCodes
           owner.owner.wva.wave.selEqs = newSelEqs; // set wave.selEqs
           println( "new selEqs is: " + owner.owner.wva.wave.selEqs );
