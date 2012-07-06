@@ -55,7 +55,7 @@ class PopUpInput extends Frame{
     float popUpWidth = 500;
     float popUpHeight =550;
     setSize( int( popUpWidth ), int( popUpHeight ) );
-    setLocation( int( mouseX ), mouseY );
+    setLocationRelativeTo( null );
     setVisible( true );  // these three must be in order : setVisible( true ), setLayout( null ) and setBackground( Color )
     setLayout( null );
     setBackground( new Color( 0, 0, 0 ) );

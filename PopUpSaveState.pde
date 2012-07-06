@@ -38,6 +38,7 @@ class PopUpSaveState extends Frame {
     curComments = oldComments;
     
     setSize( 500, 300 );
+    setLocationRelativeTo( null );
     setVisible( true );
     setBackground( new Color( 0, 0, 0 ) );
     setLayout( null );

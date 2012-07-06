@@ -30,7 +30,7 @@ class PopUpCodeChooser extends Frame{
   PopUpCodeChooser( LVActivity o, CodeCabinet cc, ArrayList<String> prevSelection ) {
     super( "Select Codes To Display" );
     setSize( 450, 450 );
-    setLocation( mouseX - 450, mouseY );
+    setLocationRelativeTo( null );
     setBackground( new Color( 255, 255, 255 ) );
     setVisible( true );
     setLayout( null );

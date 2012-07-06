@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 class PopUpLoadState extends Frame {
 
-  // Fields
+  // FieldsF
 
   ArrayList<String> savedStates;
   ArrayList<Long> savedStateIDs;
@@ -35,7 +35,8 @@ class PopUpLoadState extends Frame {
     
     setBackground( new Color( 0, 0, 0 ) );
     setLayout( null );
-    setSize( 500, 500 );
+    setSize( 500, 350 );
+    setLocationRelativeTo( null );
     setVisible( true );
 
     label = new Label( "Select a state to load: " );
